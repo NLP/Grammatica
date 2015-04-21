@@ -181,14 +181,7 @@ namespace nlp{
             _gStruct.print();
         }
 
-        //In the structure, each phrase is in a sense unique, in that if there exist
-        //multiple 'nominals' in the structure, no matter what leads to the nominal, each
-        //nominal can go to every possible path any other nominal can go
-        //So in this sense, the phrases are unique, thus we can just identify them
-        //with their names.
-        //If we wish to see if one phrase can lead to another, it does not matter if there
-        //are multiple versions of this phrase in the structure, if one of them can lead to the
-        //other phrase, they all can.
+
 
 
 
