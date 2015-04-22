@@ -3,6 +3,7 @@
 #include "LabeledGraph.h"
 #include "VectorContainer.h"
 #include <map>
+#include <vector>
 //Change grammar from graph to a map of gp to list of lists of gp
 enum GrammarPhrase{
     UNKNOWN     = 0,
@@ -56,19 +57,19 @@ static std::map<GrammarPhrase,std::string> phraseLookUp = {
 //If we wish to see if one phrase can lead to another, it does not matter if there
 //are multiple versions of this phrase in the structure, if one of them can lead to the
 //other phrase, they all can.
-typedef std::list<GrammarPhrase> GPlist;
-typedef std::list<GPlist> GPdList;
+typedef std::vector<GrammarPhrase> GPlist;
+typedef std::multimap<GrammarPhrase,GPlist> mmap;
 class Grammar{
 private:
-    std::map<GrammarPhrase,GPdList> _grammar;
+    mmap _grammar;
     void createInitialRule();
 public:
     Grammar();
-    void addRule(const GPlist& rule, const GrammarPhrase& define);
-    void removeRule(const GPlist& rule, const GrammarPhrase& define);
+    void addRule(const GrammarPhrase& define, const GPlist& rule);
+    void removeRule(const GrammarPhrase& define, const GPlist& rule);
     friend std::ostream& operator <<(std::ostream& out, const Grammar& G);
-    GPdList& getDefinition(const GrammarPHrase& define);
-    GrammarPhrase& getDefiner(const GPdList& rule);
+    GPlist &getDefinition(const GrammarPhrase& define);
+    GrammarPhrase getDefiner(const GPlist& rule);
     //Add Phrase
 
     //Add Rule

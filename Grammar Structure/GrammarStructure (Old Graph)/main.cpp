@@ -21,7 +21,6 @@ int main()
     cout << "Testing removerules" << endl;
     G.removeRule(NOUNPHRASE,{DETERMINER,NOUN});
     cout << G << endl;
-
     return 0;
 }
 
