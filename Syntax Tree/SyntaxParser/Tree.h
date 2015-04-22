@@ -5,11 +5,13 @@
 #include <cstdlib>
 #include <cassert>
 #include <iomanip>
+
 template <typename Item>
 struct TreeNode{
     typedef std::vector<TreeNode*> TNvector;
     Item _data;
     TNvector _child;
+
     TreeNode(const Item& data = Item(),
              const TNvector& children = TNvector()) {
         _data = data;
@@ -20,7 +22,7 @@ struct TreeNode{
         typename TNvector::iterator temp = it;
         while(it != _child.end()){
             ++it;
-            delete temp;
+            delete *it;
             temp = it;
         }
     }
@@ -30,6 +32,7 @@ struct TreeNode{
 
     void setData(const Item& data)                  {_data = data;}
     void setChildren(const TNvector& children)      {_child = children;}
+    void addChild(const Item& data)                 {_child.insert(_child.end(),new TreeNode<Item>(data));}
 
     const Item& data()              const           {return _data;}
     const TNvector& children()      const           {return _child;}
@@ -39,115 +42,239 @@ struct TreeNode{
     friend std::ostream& operator <<
     (std::ostream& out, const TreeNode<Other>& T)   {
         out << T.data() << ":(";
-        typename TNvector::iterator it = T._child.begin();
+        typename TNvector::const_iterator it = T._child.begin();
         while(it != T._child.end()){
-            out << *it << ", ";
+            out << **it << ", ";
+            ++it;
         }
         out << ")";
         return out;
     }
 
 };
-template <typename Process, typename Node>
-void inOrder(Process p, Node* ptr){
-    if(ptr != NULL){
-        inOrder(p,ptr->left()); //Go to the left branch
-        p(ptr->data()); //Perform process on the data of the node
-        inOrder(p,ptr->right()); //Go to the right branch
+
+namespace rt{
+    template <typename Item>
+    void clear(TreeNode<Item>*& root){
+        if(root != NULL){
+            typename TreeNode<Item>::TNvector::iterator it = root->children().begin();
+            while(it != root->children.end()){
+                clear(*it);
+                ++it;
+            }
+            delete root; //Clear the root
+            root = NULL;
+        }
+    }
+
+    template <typename Item>
+    TreeNode<Item>* copy(const TreeNode<Item>* root){
+        typename TreeNode<Item>::TNvector tChild;
+        if(root == NULL) return NULL; //If it goes past a leaf
+        else{
+            typename TreeNode<Item>::TNvector::iterator it = root->children().begin();
+            while(it != root->children().end()){
+                tChild.insert(tChild.begin(),*it);
+                ++it;
+            }
+            return new TreeNode<Item>(root->data(),tChild);
+        }
+    }
+
+    template <typename Item>
+    std::size_t size(const TreeNode<Item>* root){
+        if(root == NULL) return 0;
+        std::size_t sum = 0;
+        typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
+        while(it != root->children().end()){
+            sum += size(*it);
+            ++it;
+        }
+        return 1 + sum;
+    }
+
+    template <typename Item>
+    std::size_t leaves(const TreeNode<Item>* root){
+        if(!root) return 0;
+        if(root->isLeaf()) return 1;
+        typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
+        std::size_t num = 0;
+        while(it != root->children().end()){
+            num += leaves(*it);
+            ++it;
+        }
+        return num;
+    }
+
+    template <typename Item>
+    TreeNode<Item>* search(const TreeNode<Item>* root, const Item& item){
+        if(!root) return nullptr;
+        if(root->data() == item) return root;
+        if(root->isLeaf()) return nullptr;
+        typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
+        TreeNode<Item>* result;
+        while(it != root->children().end()){
+            result = search(*it,item);
+            if(result) return result;
+        }
+        return nullptr;
+    }
+
+    template <typename Item> //Cannot handle root being the branch and vice-versa
+    TreeNode<Item>* parent(const TreeNode<Item>* root, const TreeNode<Item>* branch){
+        if(!root || !branch) return nullptr;
+        if(root->isLeaf()) return nullptr;
+        if(root == branch) return root;
+        typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
+        TreeNode<Item>* result;
+        while(it != root->children().end()){
+            result = search(*it);
+            if(result) return root;
+        }
+        return nullptr;
     }
 }
 
-template <typename Process, typename Node>
-void preOrder(Process p, Node* ptr){
-    if(ptr != NULL){
-        p(ptr->data()); //Perform process on the data of the node
-        preOrder(p,ptr->left()); //Go to the left branch
-        preOrder(p,ptr->right()); //Go to the right branch
-    }
-}
-
-template <typename Process, typename Node>
-void postOrder(Process p, Node* ptr){
-    if(ptr != NULL){
-        postOrder(p,ptr->left()); //Go to the left branch
-        postOrder(p,ptr->right()); //Go to the right branch
-        p(ptr->data()); //Perform process on the data of the node
-    }
-}
 
 template <typename Item>
 class Tree{
 private:
+    TreeNode<Item>* _root;
+    TreeNode<Item>* _current;
 public:
-    Tree();
-    Tree(const Tree<Item>& T);
-    ~Tree();
-    Tree<Item>& operator =(const Tree<Item>& T);
+    Tree(){
+        _root = nullptr;
+        _current = _root;
+    }
 
-    void addNode(TreeNode* parent, const Item& item);
-    TreeNode* search(const Item& item);
-    bool empty();
-    void clear();
-    std::size_t leafNum();
-    void removeNode(const Item& item);
-    void set(const Item& item);
-    void shiftToRoot();
-    void shiftUp();
-    void shiftLeft();
-    void shiftRight();
-    void shiftDown(std::size_t child);
-    bool hasParent();
-    bool hasChild();
-    std::size_t childNum();
-    Item& get();
-    std::size_t size();
-    friend std::ostream& operator <<(std::ostream& out, const Tree<Item> T);
+    Tree(const Tree<Item>& T){
+        _root = rt::copy(T._root);
+        _current = _root;
+    }
+
+    ~Tree(){
+        clear();
+    }
+
+    Tree<Item>& operator =(const Tree<Item>& T){
+        clear();
+        _root = rt::copy(T._root);
+        _current = _root;
+        return *this;
+    }
+
+    void addNode(TreeNode<Item>* parent, const Item& item){
+        if(!inTree(parent)) return;
+        parent->addChild(item);
+    }
+
+    TreeNode<Item>* search(const Item& item){
+        return rt::search(_root,item);
+    }
+
+    bool inTree(TreeNode<Item>* node){
+        if(node == _root) return true;
+        else{
+            if(parent(_root,node))
+                return true;
+            else return false;
+        }
+    }
+
+    bool empty() const{
+        return (!_root);
+    }
+
+    void clear(){
+        if(!empty()) rt::clear(_root);
+    }
+
+    std::size_t leafNum(){
+        return rt::leaves(_root);
+    }
+    TreeNode<Item>* getParent(TreeNode<Item>* branch){
+        return rt::parent(_root,branch);
+    }
+
+    void removeNode(const Item& item){
+        //remove node how would you find a successor from its children to take its place
+    }
+
+    void set(const Item& item){
+        _current->setData(item);
+    }
+
+    void shiftToRoot(){
+        _current = _root;
+    }
+
+    void shiftUp(){
+        if(!hasParent()) return;
+        _current = getParent(_current);
+    }
+
+    void shiftLeft(){
+        TreeNode<Item>* parent = getParent(_current);
+        typename TreeNode<Item>::TNvector::iterator it = parent->children().begin();
+        if(_current == *it) return;
+        while(it != parent->children().end()){
+            if(*it == _current){
+                --it;
+                _current = *it;
+                break;
+            }
+            ++it;
+        }
+    }
+
+    void shiftRight(){
+        TreeNode<Item>* parent = getParent(_current);
+        typename TreeNode<Item>::TNvector::iterator it = parent->children().begin();
+        if(_current == *(--(parent->children().end()))) return;
+        while(it != parent->children().end()){
+            if(*it == _current){
+                ++it;
+                _current = *it;
+                break;
+            }
+            ++it;
+        }
+    }
+
+    void shiftDown(std::size_t child){
+        typename TreeNode<Item>::TNvector::iterator it = _current->children().begin();
+        if(child >= _current->children().size()) return;
+        for(std::size_t i = 0; i <= child; ++i){
+            ++it;
+        }
+        _current = *it;
+    }
+
+    bool hasParent(){
+        return (_current != _root);
+    }
+
+    bool hasChild(){
+        return (!_current->isLeaf());
+    }
+
+    std::size_t childNum(){
+        return (_current->children().size());
+    }
+
+    Item& get(){
+        return (_current->data());
+    }
+
+    std::size_t size() const{
+        return rt::size(_root);
+    }
+    friend std::ostream& operator <<(std::ostream& out, const Tree<Item> T){
+        out << T._root;
+        return out;
+    }
 
 };
 
-
-
-template <typename Item, typename Size>
-void print(TreeNode<Item>* root, Size depth){
-    if(root != NULL){
-        print(root->right(),depth + 1);
-        for(int i = 0; i < depth; i++) std::cout << " ";
-        std::cout << root->data() << std::endl;
-        print(root->left(),depth + 1);
-    }
-}
-
-template <typename Item>
-void clear(TreeNode<Item>*& root){
-    TreeNode<Item>* branch;
-    if(root != NULL){
-        branch = root->left(); //Clear all of the left branches
-        clear(branch);
-        branch = root->right(); //Clear all of the right branches
-        clear(branch);
-        delete root; //Clear the root
-        root = NULL;
-    }
-}
-
-template <typename Item>
-TreeNode<Item>* copy(const TreeNode<Item>* root){
-    TreeNode<Item>* tLeft;
-    TreeNode<Item>* tRight;
-    if(root == NULL) return NULL; //If it goes past a leaf
-    else{
-        tLeft = copy(root->left()); //Copy all of the left
-        tRight = copy(root->right()); //Copy all of the right
-        return new TreeNode<Item>(root->data(),tLeft,tRight); //Create a node with the left and right
-    }
-}
-
-template <typename Item>
-std::size_t size(const TreeNode<Item>* root){
-    if(root == NULL) return 0;
-    else return 1 + size(root->left()) + size(root->right());
-}
-
-#endif // BINARYTREE_H
 
 #endif // TREE_H
