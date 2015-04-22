@@ -3,7 +3,10 @@
 #include <iostream>
 #include <map>
 #include <vector>
-//Change grammar from graph to a map of gp to list of lists of gp
+
+/**
+ * @brief The GrammarPhrase enum Denotes the Grammar Phrase
+ */
 enum GrammarPhrase{
     UNKNOWN     = 0,
     ALL         = 1,
@@ -17,7 +20,11 @@ enum GrammarPhrase{
     PREP        = 9,
     DETERMINER  = 10
 };
-static const std::size_t gpSize = 10;
+
+//static const std::size_t gpSize = 10;
+/**
+  * @brief gpList The array that holds all of the Grammar Phrase enumerations.
+  */
 static const GrammarPhrase gpList[] ={
     UNKNOWN,
     ALL,
@@ -32,7 +39,9 @@ static const GrammarPhrase gpList[] ={
     DETERMINER
 };
 
-//Requires c++11
+/**
+  * @brief phraseLookUp The map that converst the GrammarPhrase enumeration to a string
+  */
 static std::map<GrammarPhrase,std::string> phraseLookUp = {
     {    UNKNOWN,       "Unknown"       },
     {    ALL,           "All"           },
@@ -56,10 +65,25 @@ static std::map<GrammarPhrase,std::string> phraseLookUp = {
 //If we wish to see if one phrase can lead to another, it does not matter if there
 //are multiple versions of this phrase in the structure, if one of them can lead to the
 //other phrase, they all can.
+
+/**
+ * @brief GPlist typedef for vector<GrammarPhrase>
+ */
 typedef std::vector<GrammarPhrase> GPlist;
+/**
+ * @brief mmap typedef for multimpa<GrammarPhrase, vector<GrammarPhrase> >
+ */
 typedef std::multimap<GrammarPhrase,GPlist> mmap;
+/**
+ * @brief The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to
+ * a vector of Grammar Phrases. This denotes the definition of the Grammar Phrase to other Grammar Phrases.
+ * There may be more than one definition for a Grammar Phrase
+ */
 class Grammar{
 private:
+    /**
+     * @brief _grammar the multimap that will hold the definitions between grammar phrases.
+     */
     mmap _grammar;
     void createInitialRule();
 public:

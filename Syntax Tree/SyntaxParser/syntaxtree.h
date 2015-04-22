@@ -17,6 +17,64 @@
 //Suggest: Once the tree is complete, just attach the word to the leaves and leave the syntax as none
 //After we find the head word for each subtree and assign the syntaxword at that node with the corresponding head word
 //Go from top to bottom and find out the syntax for each word
+
+//GO HERE:
+//www.ucl.ac.uk/internet-grammar/frames/contents.htm
+
+//Phrases
+/* Phrases always have the form Pre-Head-Post
+ * The Head is the most important part and defines the entire phrase
+ *Noun Phrase:
+ * In the Pre is usually Determiners and Adjectives
+ * The Post is usually began with that, which, who, whose, etc
+ * The Head is the Noun
+ *Verb Phrase:
+ * The Pre will be either a negator (never, not) or an adverb phrase
+ * There MUST be a post for Transitive Verb Phrases (indicates Direct Object, etc...)
+ * Intransitive Verb Phrases NEVER have a Post
+ * Most verbs are both...
+ * The Head is the Verb
+ *Adjective Phrase:
+ * Head is the Adjective
+ * Pre will include adverb phrases
+ * Post will be whatever, usually infinitives or of-phrases
+ *Adverb Phrase:
+ * Pre will include Averb Phrases
+ * Post will be RARE, but may include for-phrases
+ *Prepositional Phrase:
+ * Pre is rare
+ * Head is the preposition
+ * Post will be a noun phrases
+ */
+
+ //Clauses
+ /*Clauses require a subject and a verb
+  * Finite clauses are ones whose main verb is finite
+  * Infinite clauses have infinitive main verbs, these are dependent clauses and require an inpendent clause
+  */
+//Indentifying the Subject, Main Verb, Direct Object, Indirect Object...
+/*Subject:
+ * Declarative Sentences will have the Subject before the Main Verb
+ * Interrogative Sentences (Questions) will have the subject after the Main Verb
+ * Imperative Sentences will have no subject (implied 'You' subject)
+ * HOWEVER, Extraposition will allow subjects to come at the END for declaratives
+ * -If there is an anticipatory it that begins the sentence
+ * -
+ * Most of the time will be the Noun Phrase before the Main Verb
+ * Finite That-Clauses before the main verb
+ * Nominal Relative Clauses before the main verb
+ * To-infinitive Clauses before the main verb
+ * Present Progressive -ing Clauses before the main verb
+ * Prepositional Phrases before the Main Verb, tpyically for time and space
+ * There/That-Existential Sentences before the main verb
+ * It-description Sentences before the main verb
+ * There will be ONE subject for EACH main verb
+ *Main Verb:
+ * There will be ONE main verb for each independent clause
+ * Subject and Main Verb will ALWAYS agree on plurality in the present tense and to third person subjects
+ *Direct Object:
+ *
+ */
 enum SyntaxObject{
     UNKNOWN,
     None,

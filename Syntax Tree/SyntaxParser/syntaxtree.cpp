@@ -1,7 +1,7 @@
 #include "syntaxtree.h"
 
 
-void SyntaxTree::assignSyntax(TreeNode<GtSpair>* root){
+void SyntaxTree::assignHead(TreeNode<GtSpair>* root){
     if(!root) return; //possible throw
     if(root->isLeaf()) root->data().second = findHeadWord(root);
     TreeNode<GtSpair>::TNvector::iterator it = root->children().begin();
@@ -33,7 +33,7 @@ SyntaxWord SyntaxTree::findHeadWord(TreeNode<GtSpair> *root){
     TreeNode<GtSpair>::TNvector::iterator it = root->children().begin();
     while(it != root->children().end()){
         SyntaxWord W = findHeadWord(*it);
-        if(isHeadWord(root->data().first,W))
+        if(isHeadWord(root->data().first,W))//TODO: The word has to be a standalone word, i.e. not derived from a subtree
             return W;
         ++it;
     }
@@ -88,4 +88,22 @@ std::vector<TreeNode<GtSpair> *> &SyntaxTree::getAll() const{
     for(auto& i : soList)
         all.insert(all.begin(),findSyntax(_root,i));
     return all;
+}
+
+void SyntaxTree::assignSyntax(TreeNode<GtSpair> *root){
+    if(!root) return;
+    root->data().second._so = MAINVERB;
+    std::vector<TreeNode<GtSpair>*>::iterator it = root->children().begin();
+    while(it != root->children().end()){ //For each child
+        //Check if there is a noun phrase
+        //If there is a noun phrase, then the head word of that node is the subject
+        //Evertyhing else in the noun phrase has NONE
+        //Check if there is a noun phrase in the verbphrase
+        //If there is, then the head word of that noun phrase is the direct object
+        //Everything else that is independent in the noun phrase has NONE
+        //The independent verb of the verphrase is the main verb
+        //Check if there is a preposition phrase in the verb phrase
+        //If there is, the head word of that phrase is the indirect object
+        //Everything else will be none
+    }
 }
