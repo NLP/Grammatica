@@ -1,7 +1,7 @@
 
 Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](https://gitter.im/nlp)
 
-### TODO:
+# TODO:
 ```
 -Create Syntax Tree Class, derived from a Tree Class
 -Create Parser Class: Given a Grammar Structure and an Input, it will create all of 
@@ -13,13 +13,21 @@ It will then hold a small subset of the original set (Hopefully only 1 tree rema
 -Change Grammar from Graph to Map of Grammar Phrase to List of List of Phrases 
 (First Tier List will be for holding Multiple Definitions, Second Tier will hold Multiple Phrases in the Definition)
 ```
-### DONE:
+# DONE:
 ```
 -Created Grammar Class
 -Created the Context Free Grammar
 -Updated Grammar Class so that it flows better
+-Changed Grammar to Map (Should work perfectly)
 ```
-### Context Free Grammar of Order Zero
+# Parsing Methods
+```
+http://www.nltk.org/book/ch08.html
+```
+### Recursive Descent Parsing
+### Shift-Reduce Parsing
+### Left-Corner Parsing
+# Context Free Grammar of Order Zero
 ```
  * Sentence -> Noun Phrase + Verb Phrase
  * Noun Phrase -> Pronoun
