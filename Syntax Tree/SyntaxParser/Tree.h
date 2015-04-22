@@ -192,6 +192,7 @@ public:
     std::size_t leafNum(){
         return rt::leaves(_root);
     }
+
     TreeNode<Item>* getParent(TreeNode<Item>* branch){
         return rt::parent(_root,branch);
     }
@@ -269,6 +270,7 @@ public:
     std::size_t size() const{
         return rt::size(_root);
     }
+
     friend std::ostream& operator <<(std::ostream& out, const Tree<Item> T){
         out << T._root;
         return out;
