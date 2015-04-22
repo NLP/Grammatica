@@ -1,8 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include <iostream>
-#include "../../Grammar Structure/Grammar/ContexFreeGrammarZero.h"
-#include "../../../Parser/Tagger/word.h"
+//Given a Grammar and a set of tokens, create syntax trees
 class Parser{
 private:
 public:

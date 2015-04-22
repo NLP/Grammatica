@@ -3,6 +3,7 @@
 #include "LabeledGraph.h"
 #include "VectorContainer.h"
 #include <map>
+//Change grammar from graph to a map of gp to list of lists of gp
 enum GrammarPhrase{
     UNKNOWN     = 0,
     ALL         = 1,

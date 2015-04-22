@@ -2,6 +2,9 @@
 #define TREE_H
 #include <iostream>
 #include <vector>
+#include <cstdlib>
+#include <cassert>
+#include <iomanip>
 template <typename Item>
 struct TreeNode{
     typedef std::vector<TreeNode*> TNvector;
@@ -43,61 +46,8 @@ struct TreeNode{
         out << ")";
         return out;
     }
-};
-
-template <typename Item>
-class Tree{
-private:
-public:
-};
-
-#ifndef TREENODE_H
-#define TREENODE_H
-#include <cstdlib>
-#include <cassert>
-#include <iomanip>
-#include <iostream>
-template <typename Item>
-class TreeNode{
-private:
-    Item _data;
-    TreeNode* _left;
-    TreeNode* _right;
-public:
-    TreeNode(const Item& data = Item(), TreeNode* left = NULL, TreeNode* right = NULL){
-        _data = data;
-        _left = left;
-        _right = right;
-    }
-    ~TreeNode(){
-        if(_left) delete _left;
-        if(_right) delete _right;
-    }
-
-    Item& data()        {return _data;}
-    TreeNode* left()    {return _left;}
-    TreeNode* right()   {return _right;}
-
-    void setData(const Item& data)      {_data = data;}
-    void setLeft(TreeNode* left)        {_left = left;}
-    void setRight(TreeNode* right)      {_right = right;}
-
-    const Item& data() const        {return _data;}
-    const TreeNode* left() const    {return _left;}
-    const TreeNode* right() const   {return _right;}
-    bool isLeaf() const             {return (_left == NULL) && (_right == NULL);}
-
-    template <typename Other>
-    friend std::ostream& operator <<(std::ostream& out, const TreeNode<Other>& T){
-        out << T.data() << ":(";
-        if(T.left()) out << *T.left() << "),(";
-        if(T.right()) out << *T.right();
-        out << ")";
-        return out;
-    }
 
 };
-
 template <typename Process, typename Node>
 void inOrder(Process p, Node* ptr){
     if(ptr != NULL){
@@ -124,6 +74,38 @@ void postOrder(Process p, Node* ptr){
         p(ptr->data()); //Perform process on the data of the node
     }
 }
+
+template <typename Item>
+class Tree{
+private:
+public:
+    Tree();
+    Tree(const Tree<Item>& T);
+    ~Tree();
+    Tree<Item>& operator =(const Tree<Item>& T);
+
+    void addNode(TreeNode* parent, const Item& item);
+    TreeNode* search(const Item& item);
+    bool empty();
+    void clear();
+    std::size_t leafNum();
+    void removeNode(const Item& item);
+    void set(const Item& item);
+    void shiftToRoot();
+    void shiftUp();
+    void shiftLeft();
+    void shiftRight();
+    void shiftDown(std::size_t child);
+    bool hasParent();
+    bool hasChild();
+    std::size_t childNum();
+    Item& get();
+    std::size_t size();
+    friend std::ostream& operator <<(std::ostream& out, const Tree<Item> T);
+
+};
+
+
 
 template <typename Item, typename Size>
 void print(TreeNode<Item>* root, Size depth){
