@@ -75,6 +75,12 @@
  *Direct Object:
  *
  */
+
+//Basic Syntax Tree Outline
+//1. Create Syntax Tree
+//2. Attach corresponding Tokens to the Leaves of the Tree (Set the second of the pair's word to that word)
+//3. From Bottom Up, Find the head word of each subtree and assign it as the word of the node
+//4. From Top Down, Find the objects for each node
 enum SyntaxObject{
     UNKNOWN,
     None,
@@ -164,8 +170,7 @@ struct SyntaxWord{ //Container for a Word and a Syntactical Identifier
     SyntaxObject _so;
     NLP::Word _word;
     SyntaxWord(){
-        _so = UNKNOWN;
-        _word = NLP::Word(); //Does Word have a default constructor?
+        _so = UNKNOWN; //Does Word have a default constructor?
     }
 
     SyntaxWord(const SyntaxObject& so, const NLP::Word& word){
