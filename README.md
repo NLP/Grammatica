@@ -3,15 +3,25 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 
 # TODO:
 ```
--Create Syntax Tree Class, derived from a Tree Class
+-Move enums and structs to a single file or to their own files
+-Find a general way to calculate the subject, verb, object of the syntax tree and sentence
+-Add cases for multiple nouns in noun phrase, verbs in verb phrase, etc.
+-Change heaad word of Prep Phrase to the Prep
+-Test the Syntax Tree
+-Install qtSQL
+-Integrate the Word enums and structs with Grammar enums and structs
 -Create Parser Class: Given a Grammar Structure and an Input, it will create all of 
 the possible trees (or paths) allowed by the Grammar Structure and will match it with the Input Sequence.
 It will then reduce the set of trees by checking if it correctly matches the structure of the input.
 It will then hold a small subset of the original set (Hopefully only 1 tree remains)
 -The Paser will also identify the head verbs/nouns of each phrase and mark them on the syntax tree with Idenfitifers
 (This will be used to meaning representations and feature matrices)
--Change Grammar from Graph to Map of Grammar Phrase to List of List of Phrases 
-(First Tier List will be for holding Multiple Definitions, Second Tier will hold Multiple Phrases in the Definition)
+
+-Add new Rules for Wh-Questions
+-Find a way to generate the head words and objects of questions
+-Create enums for Wh-words and phrases
+-Create a way to store and lookup meaning representations and events
+-Find a way to identify what the questions is asking for and where to look
 ```
 # DONE:
 ```
