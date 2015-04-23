@@ -61,6 +61,61 @@ or to describe a noun (Describe the ball).
   -It also includes any description or adjective
 -Action will have features as well:
   -Includes adverbs
+  
+-Wh Identifiers (Who, What, When, Where, Why, How, Which)
+  -These denote WHAT the program should look for when asked a question
+  -The subject, verb, and possible objects and prep of the question will tell the program which event/feature to
+  search for
+    -But the Wh word will tell it what to extract from the database
+    -These are found in interrogatives
+-Functors for Commands (Common Words are: Define, Show, Explain, Describe, Find, Calculate, etc.)
+  -There is no general way to implement ALL of these so the common ones just have to be hard coded in
+  -These, like the wh Identifiers, tell the program what to do when given a command
+  -The subject and any other modifier will tell it specifically what to do the command with
+  -These are only found in imperatives
+-Possible commands:
+  -Show: Picture of DO or IDO (in the case of Show me an apple vs Show an apple)
+  -Define: Write definition of DO or IDO (same case as above)
+  -Explain: The Why or How .. Might not be possible at the moment
+  -Describe: Get the adjectives of the DO or IDO or the adverbs of the V
+  -Find: ??
+  -Calculate: Calculates the given expression 
+```
+# Rules for calculating objects and the head words
+```
+Head Words:
+-Noun Phrase: Noun
+-Verb Phrase: Verb
+-Adj Phrase: Adj
+-Adv Phrase: Adv
+-Prep Phrase: Prep
+-Sentence: Verb
+
+Objects:
+Transitive Sentences:
+-The subject almost always comes before the main verb and is a noun/noun phrase
+-The main verb will almost always be the head verb of the sentence
+-The direct object will almost always be the noun/noun phrase that follows the main verb
+-The indirect object will be the noun that follows the direct object BUT not in the Prep Phrase
+-The Prep Object will be the noun in the prep phrase
+Special Case for Infinitives, Present Progressives, 
+-These can act like subjects and direct objects
+-Infinitive Phrases include to walk in the park->I like to walk in the park
+-Present Progressive Phrases include walking in the park->I like walking in the park
+Interrogative Sentences (Questions):
+-The subject and main verb swap places most of the time
+-There is usually a Wh-Identifier that begins the sentence (except in Y/N questions)
+-The Wh is usually the first phrase
+-The main verb is still the head verb of the sentence
+-But the subject is now the first noun phrase AFTER the main verb (except in some cases of Who?)
+-The rules for DO, IDO, PO are the same, except:
+-Depending on the Wh term, one of the is replaced with it (Where replaces the Loc., Who/What replaces the subj,
+DO, or IDO, etc.) So some of the objects might be blank in these cases, and that is what we try to find when we search
+Imperative Sentences (Commands):
+-There is no subject (it is an implied you)
+-The main verb is the head verb of the sentence and is almost always first
+-The DO is the noun that follows the main verb, and the IDO follows the DO
+-The PO is in the prep phrase
 ```
 # DONE:
 ```
