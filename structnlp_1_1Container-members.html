@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.6"/>
-<title>Grammatica: Grammatica</title>
+<title>Grammatica: Member List</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,9 +37,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -59,7 +59,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-</div><!-- top -->
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
+    </ul>
+  </div>
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -74,30 +81,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+<div id="nav-path" class="navpath">
+  <ul>
+<li class="navelem"><b>nlp</b></li><li class="navelem"><a class="el" href="structnlp_1_1Container.html">Container</a></li>  </ul>
+</div>
+</div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Grammatica </div>  </div>
+<div class="title">nlp::Container&lt; Item &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1><a class="anchor" id="TODO"></a>
-TODO</h1>
-<p>-Create Syntax <a class="el" href="classTree.html">Tree</a> Class, derived from a <a class="el" href="classTree.html">Tree</a> Class -Create <a class="el" href="classParser.html">Parser</a> Class: Given a <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> Structure and an Input, it will create all of the possible trees (or paths) allowed by the <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> Structure and will match it with the Input Sequence. It will then reduce the set of trees by checking if it correctly matches the structure of the input. It will then hold a small subset of the original set (Hopefully only 1 tree remains) -The Paser will also identify the head verbs/nouns of each phrase and mark them on the syntax tree with Idenfitifers (This will be used to meaning representations and feature matrices) -Change <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> from <a class="el" href="classGraph.html">Graph</a> to Map of <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> Phrase to List of List of Phrases (First Tier List will be for holding Multiple Definitions, Second Tier will hold Multiple Phrases in the Definition)</p>
-<h1><a class="anchor" id="TODO"></a>
-TODO</h1>
-<p>-Created <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> Class -Created the Context Free <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> -Updated <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> Class so that it flows better -Changed <a class="el" href="classGrammar.html" title="The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to a vec...">Grammar</a> to Map (Should work perfectly)</p>
-<h1><a class="anchor" id="Methods"></a>
-Methods</h1>
-<p><a href="http://www.nltk.org/book/ch08.html">http://www.nltk.org/book/ch08.html</a></p>
-<h1><a class="anchor" id="Recursive"></a>
-Descent Parsing</h1>
-<h1><a class="anchor" id="Shift-Reduce"></a>
-Parsing</h1>
-<h1><a class="anchor" id="Left-Corner"></a>
-Parsing</h1>
-<h1><a class="anchor" id="Free"></a>
-Grammar of Order Zero</h1>
-<p>Sentence -&gt; Noun Phrase + Verb Phrase Noun Phrase -&gt; Pronoun Noun Phrase -&gt; Proper Noun Noun Phrase -&gt; Determiner + Nominal Nominal -&gt; Noun + Nominal Nominal -&gt; Noun Verb Phrase -&gt; Verb Verb Phrase -&gt; Verb + Noun Phrase Verb Phrase -&gt; Verb + Noun Phrase + Preposition Phrase Verb Phrase -&gt; Verb + Preposition Phrase Preposition Phrase -&gt; Preposition + Noun Phrase </p>
-</div></div><!-- contents -->
+
+<p>This is the complete list of members for <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>, including all inherited members.</p>
+<table class="directory">
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>_vec</b> (defined in <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>)</td><td class="entry"><a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a></td><td class="entry"></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>Container</b>() (defined in <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>)</td><td class="entry"><a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>insertBegin</b>(const Item &amp;I) (defined in <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>)</td><td class="entry"><a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>insertEnd</b>(const Item &amp;I) (defined in <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>)</td><td class="entry"><a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr bgcolor="#f0f0f0" class="even"><td class="entry"><b>operator&lt;&lt;</b> (defined in <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>)</td><td class="entry"><a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+  <tr bgcolor="#f0f0f0"><td class="entry"><b>operator==</b> (defined in <a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a>)</td><td class="entry"><a class="el" href="structnlp_1_1Container.html">nlp::Container&lt; Item &gt;</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+</table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated on Wed Apr 22 2015 19:51:04 for Grammatica by &#160;<a href="http://www.doxygen.org/index.html">
