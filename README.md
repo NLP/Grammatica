@@ -16,12 +16,26 @@ It will then reduce the set of trees by checking if it correctly matches the str
 It will then hold a small subset of the original set (Hopefully only 1 tree remains)
 -The Paser will also identify the head verbs/nouns of each phrase and mark them on the syntax tree with Idenfitifers
 (This will be used to meaning representations and feature matrices)
+-Event Storage for actor, action, prop, supporting actor, location, time
+-Each actor, prop will also have location and time
 
 -Add new Rules for Wh-Questions
 -Find a way to generate the head words and objects of questions
 -Create enums for Wh-words and phrases
 -Create a way to store and lookup meaning representations and events
 -Find a way to identify what the questions is asking for and where to look
+
+-Add new Rules for Commands
+-Create functors for Key Commands like Find, Define, Show, Explain, etc...
+
+-Add Rules for Adjective Phrases
+-The actor/prop/etc.. will be their own structs and will have features that hold the adjectives
+-These can be used to identify particular adjectives (Who is funny?)
+or to describe a noun (Describe the ball).
+
+-Add Rules for Adverb Phrases
+-The action will have their own structs with features holding the adverbs
+-This caan be used to identify how someone did something (How did he kick the ball).
 ```
 # DONE:
 ```
