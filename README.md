@@ -92,7 +92,7 @@ Head Words:
 -Sentence: Verb
 
 Objects:
-Transitive Sentences:
+Declarative Sentences:
 -The subject almost always comes before the main verb and is a noun/noun phrase
 -The main verb will almost always be the head verb of the sentence
 -The direct object will almost always be the noun/noun phrase that follows the main verb
