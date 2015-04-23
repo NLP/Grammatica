@@ -37,6 +37,31 @@ or to describe a noun (Describe the ball).
 -The action will have their own structs with features holding the adverbs
 -This caan be used to identify how someone did something (How did he kick the ball).
 ```
+#Key Objects to Make
+```
+-Event: It will describe an action
+  -Has an action (the verb)
+  -Actors: (The subject)
+  -Props: (Direct Objects)
+  -Receiver: (indirect Objects)
+  -Location: (Prepositional)
+-A Special Type of Event: Existence, Definition, Description
+  -Existence uses the word is/are/were/will be/to be as its action
+    -Denotes the existence of a subject
+    -Has: Actors (The subject)
+    -Location: (Where the Actors are)
+  -Definition denotes the what the subject is (He is a person. That is a cat)
+    -Has: Actors (The definee)
+    -Definition: (The Direct Object)
+  -Description denotes characteristics of the subject (He is funny.)
+    -Has Actors
+    -Has Characteristics (The adjectives acting as direct objects)
+-Actors, Props, Receivers, Location will have Features:
+  -Features include their location, time, etc.
+  -It also includes any description or adjective
+-Action will have features as well:
+  -Includes adverbs
+```
 # DONE:
 ```
 -Created Grammar Class
