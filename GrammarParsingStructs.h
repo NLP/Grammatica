@@ -1,0 +1,4 @@
+#ifndef GRAMMARPARSINGSTRUCTS_H
+#define GRAMMARPARSINGSTRUCTS_H
+//TODO: Put structs and enums here
+#endif // GRAMMARPARSINGSTRUCTS_H
