@@ -3,12 +3,11 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 
 # TODO:
 ```
--Move enums and structs to a single file or to their own files
+
 -Find a general way to calculate the subject, verb, object of the syntax tree and sentence
 -Add cases for multiple nouns in noun phrase, verbs in verb phrase, etc.
 -Change heaad word of Prep Phrase to the Prep
 -Test the Syntax Tree
--Install qtSQL
 -Integrate the Word enums and structs with Grammar enums and structs
 -Create Parser Class: Given a Grammar Structure and an Input, it will create all of 
 the possible trees (or paths) allowed by the Grammar Structure and will match it with the Input Sequence.
@@ -123,6 +122,7 @@ Imperative Sentences (Commands):
 -Created the Context Free Grammar
 -Updated Grammar Class so that it flows better
 -Changed Grammar to Map (Should work perfectly)
+-Moved enums and structs to a single file or to their own files
 ```
 # Parsing Methods
 ```
