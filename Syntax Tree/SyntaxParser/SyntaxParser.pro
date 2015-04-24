@@ -6,10 +6,12 @@ CONFIG += c++11
 QT += sql
 SOURCES += main.cpp \
     parser.cpp \
-    syntaxtree.cpp
+    syntaxtree.cpp \
+    syntaxword.cpp
 
 HEADERS += \
     parser.h \
     syntaxtree.h \
-    Tree.h
+    Tree.h \
+    syntaxword.h
 

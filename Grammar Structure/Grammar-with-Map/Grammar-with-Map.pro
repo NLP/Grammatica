@@ -1,7 +1,8 @@
 TEMPLATE = app
 CONFIG += console
 CONFIG -= app_bundle
-CONFIG -= qt
+#CONFIG -= qt
+QT += sql
 CONFIG += c++11
 SOURCES += main.cpp \
     grammar.cpp \

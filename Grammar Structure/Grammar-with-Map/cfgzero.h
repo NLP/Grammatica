@@ -15,23 +15,7 @@
  * From NPVP to DNN, A:NP,B:Default; From DNN to NNN, A:NN,B:Default; From DNN to N, A:NN,B:Default;
  * From NNN to DNN, A:NN,B:NN; (Default will be represented as ALL)
  */
-/**
- * @brief GPpair typedef for pair<GrammarPhrase, vector<GrammarPhrase> >
- */
-typedef std::pair<GrammarPhrase,GPlist> GPpair;
-/**
-  * @brief cfgzInit an array of GPpairs that hold the definition for the Context Free Grammmar of Order Zero
-  */
-static const GPpair cfgzInit[] = {
-    GPpair(SENTENCE,{NOUNPHRASE,VERBPHRASE}),
-    GPpair(NOUNPHRASE,{NOUN}),
-    GPpair(NOUNPHRASE,{DETERMINER,NOUN}),
-    GPpair(VERBPHRASE,{VERB}),
-    GPpair(VERBPHRASE,{VERB,NOUNPHRASE}),
-    GPpair(VERBPHRASE,{VERB,NOUNPHRASE,PREPPHRASE}),
-    GPpair(VERBPHRASE,{VERB,PREPPHRASE}),
-    GPpair(PREPPHRASE,{PREP,NOUNPHRASE})
-};
+
 
 /**
  * @brief The CFGZero class a child of Grammar. IT is the Context Free Grammar Structure of Order Zero

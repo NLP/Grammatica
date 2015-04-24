@@ -67,7 +67,7 @@ std::ostream &operator <<(std::ostream &out, const Grammar &G){
  * @return a vector of grammarphrases
  * NOTE: If the vector is empty, then there were no definitions found
  */
-GPlist &Grammar::getDefinition(const GrammarPhrase &define){
+GPlist Grammar::getDefinition(const GrammarPhrase &define){
     mmap::iterator it = _grammar.find(define);
     if(it != _grammar.end())
         return it->second;

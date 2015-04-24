@@ -81,103 +81,14 @@
 //2. Attach corresponding Tokens to the Leaves of the Tree (Set the second of the pair's word to that word)
 //3. From Bottom Up, Find the head word of each subtree and assign it as the word of the node
 //4. From Top Down, Find the objects for each node
-enum SyntaxObject{
-    UNKNOWN,
-    None,
-    SUBJECT,
-    MAINVERB,
-    DIRECTOBJ,
-    INDIRECTOBJ,
-    MODIFIERVERB
-};
 
-static const std::map<SyntaxObject,std::string> syntaxLookUp = {
-    {   UNKNOWN,        "Unknown"           },
-    {   SUBJECT,        "Subject"           },
-    {   MAINVERB,       "Main Verb"         },
-    {   DIRECTOBJ,      "Direct Object"     },
-    {   INDIRECTOBJ,    "Indirect Object"   },
-    {   MODIFIERVERB,   "Modifier Verb"     }
-};
+//Lookup special verbs:
+//Is (Existence, Definition, Description)
+//Have (Posession)
+//Action Verbs (run, walk, eat, )
+//Transfer Verbs (Transfer of control)
+//Locomotive Verbs (transfer of location)
 
-static const SyntaxObject soList[] = {
-    UNKNOWN,
-    SUBJECT,
-    MAINVERB,
-    DIRECTOBJ,
-    INDIRECTOBJ,
-    MODIFIERVERB
-};
-
-enum PoSPhrase{
-    UNKNOWN,
-    NONE,
-    NOUN,
-    VERB,
-    DETERMINER,
-    PREP
-};
-
-//Possible coners: PosPhrase -> wordtype and vice-versa
-//since word stores its parts of speech as a wordtype
-static const std::map<PoSPhrase,std::string> posLookUp = {
-    {UNKNOWN,       "Unknown"       },
-    {NONE,          "None"          },
-    {NOUN,          "Noun"          },
-    {VERB,          "Verb"          },
-    {DETERMINER,    "Determiner"    },
-    {PREP,          "Preposition"   }
-};
-
-static const PoSPhrase posList[] = {
-    UNKNOWN,
-    NONE,
-    NOUN,
-    VERB,
-    DETERMINER,
-    PREP
-};
-
-bool isPoS(const GrammarPhrase& gp){
-    for(auto& i : posList){
-        if(posLookUp[i] == phraseLookUp[gp])
-            return true;
-    }
-    return false;
-}
-bool isHeadWord(const GrammarPhrase& gp, const SyntaxWord& W){
-    switch(gp){
-    case PREPPHRASE:
-    case NOUNPHRASE:{
-        //if W is a noun
-        return true;
-        break;
-    }
-    case SENTENCE:
-    case VERBPHRASE:{
-        //if W is a verb
-        return true;
-        break;
-    }
-    default:{
-        break;
-    }
-    }
-    return false;
-}
-
-struct SyntaxWord{ //Container for a Word and a Syntactical Identifier
-    SyntaxObject _so;
-    NLP::Word _word;
-    SyntaxWord(){
-        _so = UNKNOWN; //Does Word have a default constructor?
-    }
-
-    SyntaxWord(const SyntaxObject& so, const NLP::Word& word){
-        _so = so;
-        _word = word;
-    }
-};
 
 typedef std::pair<GrammarPhrase,SyntaxWord> GtSpair;
 class SyntaxTree: public Tree<GtSpair>{
