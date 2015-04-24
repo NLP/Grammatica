@@ -81,10 +81,10 @@ GPlist Grammar::getDefinition(const GrammarPhrase &define){
  * @brief Grammar::getDefiner Returns the phrase whose definition is the same as the one specified
  * @param rule the definition
  * @return the phrase that corresponds to the rule
- * NOTE: If the phrase is UNKNOWN, then the definer was not found
+ * NOTE: If the phrase is G_INVALID, then the definer was not found
  */
 GrammarPhrase Grammar::getDefiner(const GPlist &rule){
     for(mmap::iterator it = _grammar.begin(); it != _grammar.end(); ++it)
         if(it->second == rule) return it->first;
-    return UNKNOWN;
+    return G_INVALID;
 }

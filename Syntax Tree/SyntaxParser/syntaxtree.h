@@ -3,6 +3,8 @@
 #include "Tree.h"
 #include "../../Grammar Structure/Grammar-with-Map/grammar.h"
 #include "../../../Parser/Tagger/word.h"
+//#include "../../../CONFIG/config.h"
+//#include "syntaxword.h"
 //Holds a grammar rule tree attached at the very ends as leafs the words
 //Then for each subtree, it finds the head word
 //Give it functions to access these head words and identify which is which
@@ -89,18 +91,56 @@
 //Transfer Verbs (Transfer of control)
 //Locomotive Verbs (transfer of location)
 
+struct SyntaxWord{ //Container for a Word and a Syntactical Identifier
+    SyntaxObject _so;
+    Word _word;
+    SyntaxWord(){
+        _so = S_INVALID;
+    }
 
+    SyntaxWord(const SyntaxObject& so, const Word& word){
+        _so = so;
+        _word = word;
+    }
+
+    bool isHeadWord(const GrammarPhrase& gp) const{
+        switch(gp){
+        case PREPPHRASE:{
+
+        }
+        case NOUNPHRASE:{
+            //if W is a noun
+            return true;
+            break;
+        }
+        case SENTENCE:
+        case VERBPHRASE:{
+            //if W is a verb
+            return true;
+            break;
+        }
+        default:{
+            break;
+        }
+        }
+        return false;
+    }
+};
+
+//ADd getPO
 typedef std::pair<GrammarPhrase,SyntaxWord> GtSpair;
 class SyntaxTree: public Tree<GtSpair>{
 private:
     //Finds a specified syntax in the tree
-    TreeNode<GtSpair> *findSyntax(TreeNode<GtSpair>* root, SyntaxObject syntax);
+    TreeNode<GtSpair> *findSyntax(TreeNode<GtSpair>* root, SyntaxObject syntax) const;
     //Calculates the head word of the specified subtree
-    SyntaxWord findHeadWord(TreeNode<GtSpair>* root);
+    SyntaxWord findHeadWord(const GrammarPhrase& gp, const std::vector<SyntaxWord> &s);
     //Assigns the head word to each node in the tree (Sets the word in the syntaxword)
     void assignHead(TreeNode<GtSpair>* root);
+    bool isPoS(const GrammarPhrase& gp) const;
 public:
     SyntaxTree();
+    //Add constructor with TreeNode*
     SyntaxTree(const SyntaxTree& S);
     ~SyntaxTree();
     SyntaxTree& operator =(const SyntaxTree& S);
@@ -109,10 +149,10 @@ public:
     TreeNode<GtSpair>* getSubject() const;
     TreeNode<GtSpair>* getDO() const;
     TreeNode<GtSpair>* getIDO() const;
-    std::vector<TreeNode<GtSpair>*>& getAll() const;
+    std::vector<TreeNode<GtSpair>*> getAll() const;
     //Assigns the syntax to each node in the tree (Sets the syntax in the syntaxword)
     void assignSyntax(TreeNode<GtSpair> *root);
-
+    void attachWords(const std::vector<Word> &w);
     SyntaxWord syntax(const TreeNode<GtSpair> *branch) const;
 };
 

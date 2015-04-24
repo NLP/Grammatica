@@ -58,7 +58,7 @@ namespace rt{
     void clear(TreeNode<Item>*& root){
         if(root != NULL){
             typename TreeNode<Item>::TNvector::iterator it = root->children().begin();
-            while(it != root->children.end()){
+            while(it != root->children().end()){
                 clear(*it);
                 ++it;
             }
@@ -72,7 +72,7 @@ namespace rt{
         typename TreeNode<Item>::TNvector tChild;
         if(root == NULL) return NULL; //If it goes past a leaf
         else{
-            typename TreeNode<Item>::TNvector::iterator it = root->children().begin();
+            typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
             while(it != root->children().end()){
                 tChild.insert(tChild.begin(),*it);
                 ++it;
@@ -133,12 +133,29 @@ namespace rt{
         }
         return nullptr;
     }
+
+    template <typename Item> //Test for ordering of the leaves
+    std::vector<TreeNode<Item>*>& allLeaves(const TreeNode<Item>* root){
+        std::vector<TreeNode<Item>*> s;
+        if(!root) return s;
+        if(root->isLeaf()){
+            s.insert(s.begin(),root);
+            return s;
+        }
+        typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
+        while(it != root->children().end()){
+            std::vector<TreeNode<Item>*> t = allLeaves(*it);
+            s.insert(s.end(),t.begin(),t.end());
+            ++it;
+        }
+        return s;
+    }
 }
 
 
 template <typename Item>
 class Tree{
-private:
+protected:
     TreeNode<Item>* _root;
     TreeNode<Item>* _current;
 public:
@@ -269,6 +286,10 @@ public:
 
     std::size_t size() const{
         return rt::size(_root);
+    }
+
+    std::vector<TreeNode<Item>*>& getLeaves(){
+        return rt::allLeaves(_root);
     }
 
     friend std::ostream& operator <<(std::ostream& out, const Tree<Item> T){
