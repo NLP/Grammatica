@@ -32,7 +32,7 @@ public:
     void addRule(const GrammarPhrase& define, const GPlist& rule);
     void removeRule(const GrammarPhrase& define, const GPlist& rule);
     friend std::ostream& operator <<(std::ostream& out, const Grammar& G);
-    GPlist getDefinition(const GrammarPhrase& define);
+    std::vector<GPlist> getDefinition(const GrammarPhrase& define);
     GrammarPhrase getDefiner(const GPlist& rule);
 
 };

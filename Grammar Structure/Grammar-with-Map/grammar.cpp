@@ -23,7 +23,7 @@ Grammar::Grammar(){
  * NOTE: This will take care of the empty sentence definition
  */
 void Grammar::addRule(const GrammarPhrase &define, const GPlist &rule){
-    GPlist g = getDefinition(define);
+    std::vector<GPlist> g = getDefinition(define);
     if(g.empty())
         _grammar.erase(define);
     _grammar.insert(mmap::value_type(define,rule));
@@ -67,14 +67,13 @@ std::ostream &operator <<(std::ostream &out, const Grammar &G){
  * @return a vector of grammarphrases
  * NOTE: If the vector is empty, then there were no definitions found
  */
-GPlist Grammar::getDefinition(const GrammarPhrase &define){
-    mmap::iterator it = _grammar.find(define);
-    if(it != _grammar.end())
-        return it->second;
-    else{
-        GPlist g;
-        return g;
+std::vector<GPlist> Grammar::getDefinition(const GrammarPhrase &define){
+    std::pair<mmap::iterator,mmap::iterator> it = _grammar.equal_range(define);
+    std::vector<GPlist> g;
+    for(mmap::iterator i = it.first; i != it.second; ++i){
+        g.insert(g.end(),i->second);
     }
+    return g;
 }
 
 /**

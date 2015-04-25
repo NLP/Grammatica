@@ -38,9 +38,8 @@ struct TreeNode{
     const TNvector& children()      const           {return _child;}
     bool isLeaf()                   const           {return _child.empty();}
 
-    template <typename Other>
     friend std::ostream& operator <<
-    (std::ostream& out, const TreeNode<Other>& T)   {
+    (std::ostream& out, const TreeNode<Item>& T)   {
         out << T.data() << ":(";
         typename TNvector::const_iterator it = T._child.begin();
         while(it != T._child.end()){
@@ -161,6 +160,11 @@ protected:
 public:
     Tree(){
         _root = nullptr;
+        _current = _root;
+    }
+
+    Tree(TreeNode<Item>* root){
+        _root = root;
         _current = _root;
     }
 
