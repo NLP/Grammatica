@@ -11,7 +11,7 @@ var indexSectionsWithContent =
   1: "cglpstv",
   2: "acgr",
   3: "o",
-  4: "gr"
+  4: "r"
 };
 
 var indexSectionNames =
