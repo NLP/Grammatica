@@ -1,53 +1,11 @@
 #ifndef GRAMMAR_H
 #define GRAMMAR_H
-#include "LabeledGraph.h"
-#include "VectorContainer.h"
+#include <iostream>
 #include <map>
-//Change grammar from graph to a map of gp to list of lists of gp
-enum GrammarPhrase{
-    UNKNOWN     = 0,
-    ALL         = 1,
-    SENTENCE    = 2,
-    NOUNPHRASE  = 3,
-    VERBPHRASE  = 4,
-    PREPPHRASE  = 5,
-    NOMINAL     = 6,
-    NOUN        = 7,
-    VERB        = 8,
-    PREP        = 9,
-    DETERMINER  = 10
-};
-static const std::size_t gpSize = 10;
-static const GrammarPhrase gpList[] ={
-    UNKNOWN,
-    ALL,
-    SENTENCE,
-    NOUNPHRASE,
-    VERBPHRASE,
-    PREPPHRASE,
-    NOMINAL,
-    NOUN,
-    VERB,
-    PREP,
-    DETERMINER
-};
-
-//Requires c++11
-static std::map<GrammarPhrase,std::string> phraseLookUp = {
-    {    UNKNOWN,       "Unknown"       },
-    {    ALL,           "All"           },
-    {    SENTENCE,      "Sentence"      },
-    {    NOUNPHRASE,    "Noun Phrase"   },
-    {    VERBPHRASE,    "Verb Phrase"   },
-    {    PREPPHRASE,    "Prep. Phrase"  },
-    {    NOMINAL,       "Nominal"       },
-    {    NOUN,          "Noun"          },
-    {    VERB,          "Verb"          },
-    {    PREP,          "Preposition"   },
-    {    DETERMINER,    "Determiner"    }
-
-};
-
+#include <vector>
+//#include "../../../CONFIG/config.h"
+#include "../CONFIG/config.h"
+using namespace NLP;
 //In the structure, each phrase is in a sense unique, in that if there exist
 //multiple 'nominals' in the structure, no matter what leads to the nominal, each
 //nominal can go to every possible path any other nominal can go
@@ -56,53 +14,27 @@ static std::map<GrammarPhrase,std::string> phraseLookUp = {
 //If we wish to see if one phrase can lead to another, it does not matter if there
 //are multiple versions of this phrase in the structure, if one of them can lead to the
 //other phrase, they all can.
-typedef std::list<GrammarPhrase> GPlist;
-typedef std::list<GPlist> GPdList;
+
+
+/**
+ * @brief The Grammar class A generic Grammar class that contains a multimap. It maps a Grammar Phrase to
+ * a vector of Grammar Phrases. This denotes the definition of the Grammar Phrase to other Grammar Phrases.
+ * There may be more than one definition for a Grammar Phrase
+ */
 class Grammar{
 private:
-    std::map<GrammarPhrase,GPdList> _grammar;
+    /**
+     * @brief _grammar the multimap that will hold the definitions between grammar phrases.
+     */
+    mmap _grammar;
     void createInitialRule();
 public:
     Grammar();
-    void addRule(const GPlist& rule, const GrammarPhrase& define);
-    void removeRule(const GPlist& rule, const GrammarPhrase& define);
+    void addRule(const GrammarPhrase& define, const GPlist& rule);
+    void removeRule(const GrammarPhrase& define, const GPlist& rule);
     friend std::ostream& operator <<(std::ostream& out, const Grammar& G);
-    GPdList& getDefinition(const GrammarPHrase& define);
-    GrammarPhrase& getDefiner(const GPdList& rule);
-    //Add Phrase
+    std::vector<GPlist> getDefinition(const GrammarPhrase& define);
+    GrammarPhrase getDefiner(const GPlist& rule);
 
-    //Add Rule
-    //Remove Rule
-    //Print
-    //Access Vector at Indexes
-    //Get Labels at Indexes
-    //
 };
-
-//class Grammar{
-//private:
-//    LabeledGraph<GPvector,GrammarPhrase> _grammar;
-//    void createSentence();
-//public:
-//    Grammar();
-//    void addPhrase(const GPvector& phrase, std::size_t parent, GrammarPhrase source = ALL, GrammarPhrase dest = ALL);
-//    void addRule(std::size_t from, std::size_t to, GrammarPhrase source = ALL, GrammarPhrase dest = ALL);
-//    void removeRule(std::size_t from, std::size_t to);
-
-//    GPvector& getVector(std::size_t index);
-//    std::size_t getIndex(const GPvector& phrase);
-//    GrammarPhrase getSource(std::size_t from, std::size_t to);
-//    GrammarPhrase getDest(std::size_t from, std::size_t to);
-//    friend std::ostream& operator <<(std::ostream& out, const Grammar& G);
-//    std::set<std::size_t> getNeighbors(std::size_t phrase);
-//    //Add Phrase
-
-//    //Add Rule
-//    //Remove Rule
-//    //Print
-//    //Access Vector at Indexes
-//    //Get Labels at Indexes
-//    //
-//};
-
 #endif // GRAMMAR_H

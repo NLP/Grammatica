@@ -2,14 +2,80 @@
 #define SYNTAXTREE_H
 #include "Tree.h"
 #include "../../Grammar Structure/Grammar-with-Map/grammar.h"
-#include "../../../Parser/Tagger/word.h"
-#include "../../../CONFIG/config.h"
+//#include "../../../Parser/Tagger/word.h"
+//#include "../../../CONFIG/config.h"
 #include "syntaxword.h"
-typedef std::pair<GrammarPhrase,SyntaxWord> GtSpair;
+
+/**
+ * @brief GPSWpair typedef for std::pair<GrammarPhrase,SyntaxWord>
+ */
+typedef std::pair<GrammarPhrase,SyntaxWord> GPSWpair;
+
+/**
+ * @brief The GSContainerpair struct Container for a GPSWpair
+ */
+struct GSContainerpair{
+    /**
+     * @brief _d the pair
+     */
+    GPSWpair _d;
+
+    /**
+     * @brief GSContainerpair Default Constructor
+     */
+    GSContainerpair(){}
+
+    /**
+     * @brief GSContainerpair Constructor
+     * @param g GrammarPhrase
+     * @param W SyntaxWord
+     */
+    GSContainerpair(GrammarPhrase g, const SyntaxWord& W){
+        _d = GPSWpair(g,W);
+    }
+
+    /**
+     * @brief operator << insertion
+     * @param out output stream
+     * @param G Container
+     * @return output stream
+     */
+    friend std::ostream& operator <<(std::ostream& out, const GSContainerpair& G){
+        out << "(" << phraseLookUp[G._d.first] << "," << G._d.second << ")";
+        return out;
+    }
+};
+
+/**
+ * @brief GtSpair typedef for GSContainerpair
+ */
+typedef GSContainerpair GtSpair;
+
+/**
+ * @brief TNpair typedef for TreeNode<GtSpair>
+ */
 typedef TreeNode<GtSpair> TNpair;
+
+/**
+ * @brief Tpair typedef for Tree<GtSpair>
+ */
 typedef Tree<GtSpair> Tpair;
+
+/**
+ * @brief The SyntaxTree class The Tree specialized for holding syntax and words
+ * INHERITS: from Tree
+ */
 class SyntaxTree: public Tree<GtSpair>{
 private:
+    void recurHead(TNpair* root);
+    void recurObj(TNpair* root, const Word &W, SyntaxObject S);
+    Word getHeadWord(GrammarPhrase g, TNpair::TNvector W);
+
+    TNpair* findPhrase(TNpair *start, GrammarPhrase find);
+    void setSubj(TNpair* sentence);
+    void setMV(TNpair* sentence);
+    void setDO(TNpair* sentence);
+    void setIDO(TNpair* sentence);
 public:
     SyntaxTree();
     SyntaxTree(TNpair* root);
@@ -17,6 +83,7 @@ public:
     SyntaxTree& operator =(const SyntaxTree& S);
     ~SyntaxTree();
 
+    //These are functions for Parser only
     void assignHeads();
     void assignObjects();
 
@@ -24,7 +91,6 @@ public:
     //Do stuff to current
     //Create child (Must not have any children)
     void addDef(GPlist def);
-    //Remove the child
     void removeDef();
     GPlist getDef();
     GrammarPhrase getPhrase();
@@ -34,6 +100,8 @@ public:
     bool atLastLeaf();
     bool atFirstLeaf();
     std::size_t leavesBefore();
+    std::size_t childIndex(TNpair* parent, TNpair* child);
+
 };
 
 
