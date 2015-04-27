@@ -175,11 +175,21 @@ void testParser(){
     CFGZero Z;
     Wvector W;
     W.insert(W.end(),
-            {Word(Token("John",ALPHA),{verb,noun}),
-             Word(Token("kicks",ALPHA),{verb}),
+//            {Word(Token("The",ALPHA),{determiner}),
+//             Word(Token("cat",ALPHA),{noun}),
+//             Word(Token("ate",ALPHA),{verb}),
+//             Word(Token("an",ALPHA),{determiner}),
+//             Word(Token("apple",ALPHA),{noun}),
+//             Word(Token("on",ALPHA),{preposition}),
+//             Word(Token("the",ALPHA),{determiner}),
+//             Word(Token("tree",ALPHA),{noun})
+//            {Word(Token("John",ALPHA),{verb,noun}),
+//             Word(Token("kicks",ALPHA),{verb}),
 //             Word(Token("ball",ALPHA),{noun}),
-             Word(Token("to",ALPHA),{preposition}),
-             Word(Token("Mark",ALPHA),{noun})
+//             Word(Token("to",ALPHA),{preposition}),
+//             Word(Token("Mark",ALPHA),{noun})
+            {Word(Token("He",ALPHA),{noun}),
+             Word(Token("walks",ALPHA),{verb})
              });
     Parser P(Z,W);
     cout << "Getting the Grammar" << endl;

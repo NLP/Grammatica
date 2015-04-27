@@ -167,13 +167,17 @@ namespace rt{
      * @return the number of leaves
      */
     std::size_t leaves(const TreeNode<Item>* root){
+//        using namespace std;
+//        cout << "in leaves" << endl;
         if(!root) return 0;
+//        cout << "root is not nULL" << endl;
         if(root->isLeaf()) return 1;
-        typename TreeNode<Item>::TNvector::const_iterator it = root->children().begin();
+//        cout << "root is not leaf" << endl;
+
+
         std::size_t num = 0;
-        while(it != root->children().end()){
-            num += leaves(*it);
-            ++it;
+        for(std::size_t i = 0; i < root->children().size(); ++i){
+            num += leaves(root->children()[i]);
         }
         return num;
     }

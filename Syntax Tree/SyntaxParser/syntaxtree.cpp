@@ -129,17 +129,29 @@ bool SyntaxTree::atFirstLeaf(){
  * @return the number of leaves before current
  */
 std::size_t SyntaxTree::leavesBefore(){
+    using namespace std;
+//    cout << "In leavesbefore" << endl;
     TNpair* head = rt::parent(_root,_current);
+//    if(head) cout << "Head: " << *head << endl;
+//    else cout << "Head: EMPTY" << endl;
     std::size_t sum = 0;
     while(head){
+//        cout << "In while" << endl;
         for(std::size_t i = 0; i < head->children().size(); ++i){
-            if(head->children()[i] == _current)
+//            cout << "i: " << i << endl;
+            if(head->children()[i] == _current){
+//                cout << "in for if" << endl;
                 break;
+            }
+//            cout << "head->children()[i] != _current" << endl;
             sum += rt::leaves(head->children()[i]);
+//            cout << "new sum: " << sum << endl;
         }
         head = rt::parent(_root,head);
+//        cout << "got new head" << endl;
         if(head == Tpair::_root) break;
     }
+//    cout << "Done/ sum: " << sum << endl;
     return sum;
 }
 

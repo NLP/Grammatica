@@ -67,14 +67,20 @@ STvector Parser::parse(){
     while(recDescent(S,cutoff)){ //RecDescends based on the CURRENT pointer in the tree
 //        cout << "WE HAVE A TREE" << endl;
         _valid.insert(_valid.end(),S);
+//        std::cout << S << std::endl;
+//        cout << "finding first incomplete of S" << endl;
         if(!findFirstIncomplete(S)){ //Sets the CURRENT to the first slowest subtree that has more defs to explore
             break; //If it cannot find any more subtrees with more defs to explore, then stop
         }
+//        cout << "Found it and moved current" << endl;
 //        cout << *S.getCurrent() << endl;
 //        cout << S.leavesBefore() << endl;
         cutoff = S.leavesBefore();
+//        cout << "Found new cutoff: " << cutoff << endl;
         removePartial(S);
+//        cout << "removed partial" << endl;
     } //As long as recdescent is able to continue making trees
+//    std::cout << "After while" << std::endl;
     for(std::size_t i = 0; i < _valid.size(); ++i){
         attachWords(_valid[i]);
         assignHeadWords(_valid[i]);
