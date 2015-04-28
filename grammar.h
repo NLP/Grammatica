@@ -3,8 +3,8 @@
 #include <iostream>
 #include <map>
 #include <vector>
-//#include "../../../CONFIG/config.h"
 #include "../CONFIG/config.h"
+
 using namespace NLP;
 //In the structure, each phrase is in a sense unique, in that if there exist
 //multiple 'nominals' in the structure, no matter what leads to the nominal, each

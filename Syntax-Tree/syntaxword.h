@@ -1,7 +1,8 @@
 #ifndef SYNTAXWORD_H
 #define SYNTAXWORD_H
 //#include "../../../CONFIG/config.h"
-#include "../../../Parser/Tagger/word.h"
+#include "../../Parser/Tagger/word.h"
+
 using namespace NLP;
 /**
  * @brief The SyntaxWord class Container for a Word and a Syntax Identifier

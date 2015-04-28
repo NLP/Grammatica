@@ -1,7 +1,7 @@
 #ifndef SYNTAXTREE_H
 #define SYNTAXTREE_H
 #include "Tree.h"
-#include "../../Grammar Structure/Grammar-with-Map/grammar.h"
+#include "../Grammar Structure/Grammar-with-Map/grammar.h"
 //#include "../../../Parser/Tagger/word.h"
 //#include "../../../CONFIG/config.h"
 #include "syntaxword.h"
