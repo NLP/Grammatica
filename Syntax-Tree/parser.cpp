@@ -89,6 +89,14 @@ STvector Parser::parse(){
     return _valid;
 }
 
+std::vector<SyntaxWord> Parser::getAll(const SyntaxTree &S){
+    return S.getAll();
+}
+
+std::vector<SyntaxWord> Parser::getObj(const SyntaxTree &S, SyntaxObject O){
+    return S.getObj(O);
+}
+
 /**
  * @brief Parser::findFirstIncomplete Finds the first incomplete node
  * (The first phrase who has yet to go through all of its definitions))

@@ -169,6 +169,26 @@ size_t SyntaxTree::childIndex(TNpair* parent,TNpair *child){
     return -1;
 }
 
+std::vector<SyntaxWord> SyntaxTree::getAll() const{
+    std::vector<SyntaxWord> All;
+    std::vector<TNpair*> L = rt::allLeaves(_root);
+    for(std::size_t i = 0; i < L.size(); ++i){
+        All.insert(All.end(),L[i]->data()._d.second);
+    }
+    return All;
+}
+
+std::vector<SyntaxWord> SyntaxTree::getObj(SyntaxObject S) const{
+    std::vector<SyntaxWord> Obj;
+    std::vector<TNpair*> L = rt::allLeaves(_root);
+    for(std::size_t i = 0; i < L.size(); ++i){
+        if(L[i]->data()._d.second.getSyntax() == S){
+            Obj.insert(Obj.end(),L[i]->data()._d.second);
+        }
+    }
+    return Obj;
+}
+
 /**
  * @brief SyntaxTree::assignHeads assigns the head words to each node
  */
@@ -356,3 +376,4 @@ void SyntaxTree::setIDO(TNpair *sentence){
     Word W = r->data()._d.second.getWord();
     recurObj(sentence,W,INDIRECTOBJ);
 }
+

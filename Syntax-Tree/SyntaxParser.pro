@@ -8,11 +8,11 @@ SOURCES += main.cpp \
     parser.cpp \
     syntaxtree.cpp \
     syntaxword.cpp \
-    ../../../Parser/Tagger/word.cpp \
-    ../../../Parser/Tokenizer/token.cpp \
-    ../../grammar.cpp \
+    ../../Parser/Tagger/word.cpp \
+    ../../Parser/Tokenizer/token.cpp \
+    ../grammar.cpp \
 #    ../../Grammar Structure/Grammar-with-Map/cfgzero.cpp \
-    ../../cfgzero.cpp
+    ../cfgzero.cpp
 
 
 HEADERS += \
@@ -20,11 +20,11 @@ HEADERS += \
     syntaxtree.h \
     Tree.h \
     syntaxword.h \
-    ../../../Parser/Tagger/word.h \
-    ../../../Parser/Tokenizer/token.h \
-    ../../../CONFIG/config.h \
-    ../../grammar.h \
+    ../../Parser/Tagger/word.h \
+    ../../Parser/Tokenizer/token.h \
+    ../../CONFIG/config.h \
+    ../grammar.h \
 #    ../../Grammar Structure/Grammar-with-Map/cfgzero.h \
-    ../../cfgzero.h
+    ../cfgzero.h
 
 

@@ -46,6 +46,7 @@ private:
     bool findFirstIncomplete(SyntaxTree &S);
     void removePartial(SyntaxTree& S);
 
+
     TNpair *removePartial(TNpair* root, TNpair* target);
 
     Word getNextWord(std::size_t i);
@@ -67,6 +68,8 @@ public:
 
     STvector parse();
 
+    std::vector<SyntaxWord> getAll(const SyntaxTree& S);
+    std::vector<SyntaxWord> getObj(const SyntaxTree& S, SyntaxObject O);
 };
 
 #endif // PARSER_H

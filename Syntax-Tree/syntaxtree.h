@@ -102,6 +102,8 @@ public:
     std::size_t leavesBefore();
     std::size_t childIndex(TNpair* parent, TNpair* child);
 
+    std::vector<SyntaxWord> getAll() const;
+    std::vector<SyntaxWord> getObj(SyntaxObject S) const;
 };
 
 
