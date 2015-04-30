@@ -81,11 +81,19 @@ STvector Parser::parse(){
 //        cout << "removed partial" << endl;
     } //As long as recdescent is able to continue making trees
 //    std::cout << "After while" << std::endl;
+    using namespace std;
     for(std::size_t i = 0; i < _valid.size(); ++i){
+        assignType(_valid[i]);
         attachWords(_valid[i]);
         assignHeadWords(_valid[i]);
         assignObjects(_valid[i]);
+//        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
+//        cout << _valid[i] << endl;
     }
+//    for(std::size_t i = 0; i < _valid.size(); ++i){
+//        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
+//        cout << _valid[i] << endl;
+//    }
     return _valid;
 }
 
@@ -271,7 +279,9 @@ void Parser::attachWords(SyntaxTree& S){
     TNpair::TNvector L = S.getLeaves(); //NEED LEAVES FUNCTION
     TNpair::TNvector::iterator it = L.begin();
     while(it != L.end()){
-        (*it)->data()._d.second.setWord(getNextWord(i));
+        Word W = getNextWord(i);
+        removeAllOtherTypes(W,GPtoWT[(*it)->data()._d.first]);
+        (*it)->data()._d.second.setWord(W);
         ++it;
         ++i;
     }
@@ -291,6 +301,16 @@ void Parser::assignHeadWords(SyntaxTree& S){
  */
 void Parser::assignObjects(SyntaxTree& S){
     S.assignObjects();
+}
+
+void Parser::assignType(SyntaxTree &S){
+    S.determineType();
+//    std::cout << "ASSIGNTYPE: " << sentenceLookUp[S.getSentenceType()] << std::endl;
+}
+
+void Parser::removeAllOtherTypes(Word &W, WordType trueType){
+    W = Word(Token(W.getTokenString(),ALPHA),{trueType},W.getDefinitions());
+
 }
 
 /**

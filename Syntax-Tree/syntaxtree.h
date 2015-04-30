@@ -67,6 +67,7 @@ typedef Tree<GtSpair> Tpair;
  */
 class SyntaxTree: public Tree<GtSpair>{
 private:
+    SentenceType _st;
     void recurHead(TNpair* root);
     void recurObj(TNpair* root, const Word &W, SyntaxObject S);
     Word getHeadWord(GrammarPhrase g, TNpair::TNvector W);
@@ -76,6 +77,9 @@ private:
     void setMV(TNpair* sentence);
     void setDO(TNpair* sentence);
     void setIDO(TNpair* sentence);
+    void setQ(TNpair* sentence);
+    void setAux(TNpair* sentence);
+
 public:
     SyntaxTree();
     SyntaxTree(TNpair* root);
@@ -86,7 +90,7 @@ public:
     //These are functions for Parser only
     void assignHeads();
     void assignObjects();
-
+    void determineType();
 
     //Do stuff to current
     //Create child (Must not have any children)
@@ -104,6 +108,7 @@ public:
 
     std::vector<SyntaxWord> getAll() const;
     std::vector<SyntaxWord> getObj(SyntaxObject S) const;
+    SentenceType getSentenceType() const;
 };
 
 

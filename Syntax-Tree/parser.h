@@ -56,6 +56,9 @@ private:
     void attachWords(SyntaxTree& S);
     void assignHeadWords(SyntaxTree& S);
     void assignObjects(SyntaxTree& S);
+    void assignType(SyntaxTree& S);
+
+    void removeAllOtherTypes(Word& W, WordType trueType);
 public:
     Parser();
     Parser(const Grammar& G, const Wvector& words);

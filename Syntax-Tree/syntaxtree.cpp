@@ -1,11 +1,12 @@
 #include "syntaxtree.h"
-
+using namespace std;
 /**
  * @brief SyntaxTree::SyntaxTree Default Constructor
  */
 SyntaxTree::SyntaxTree(): Tpair::Tree(){
     Tpair::_root = new TreeNode<GtSpair>(GtSpair(SENTENCE,SyntaxWord()));
     _current = _root;
+    _st = ST_INVALID;
 }
 
 /**
@@ -21,7 +22,7 @@ SyntaxTree::SyntaxTree(TNpair* root):Tpair::Tree(root){
  * @param S SyntaxTree
  */
 SyntaxTree::SyntaxTree(const SyntaxTree& S):Tpair::Tree(S){
-
+    _st = S._st;
 }
 
 /**
@@ -32,6 +33,7 @@ SyntaxTree::SyntaxTree(const SyntaxTree& S):Tpair::Tree(S){
 SyntaxTree& SyntaxTree::operator =(const SyntaxTree& S){
     Tpair::_root = rt::copy(S._root);
     _current = _root;
+    _st = S._st;
     return *this;
 }
 
@@ -189,6 +191,10 @@ std::vector<SyntaxWord> SyntaxTree::getObj(SyntaxObject S) const{
     return Obj;
 }
 
+SentenceType SyntaxTree::getSentenceType() const{
+    return _st;
+}
+
 /**
  * @brief SyntaxTree::assignHeads assigns the head words to each node
  */
@@ -203,6 +209,21 @@ void SyntaxTree::assignObjects(){
     setMV(Tpair::_root);
     setDO(Tpair::_root);
     setIDO(Tpair::_root);
+//    setAux(Tpair::_root);
+//    setQ(Tpair::_root);
+}
+
+void SyntaxTree::determineType(){
+    TNpair::TNvector def = Tpair::_root->children();
+    if((*def.begin())->data()._d.first == INTPHRASE)
+        _st = INTERROGATIVE;
+    else if((*def.begin())->data()._d.first == VERBPHRASE)
+        _st = IMPERATIVE;
+    else if((*def.begin())->data()._d.first == NOUNPHRASE)
+        _st = DECLARATIVE;
+    else
+        _st = ST_INVALID;
+
 }
 
 /**
@@ -216,6 +237,7 @@ void SyntaxTree::recurHead(TNpair* root){
     for(std::size_t i = 0; i < root->children().size(); ++i)
         recurHead(root->children()[i]);
     Word W = getHeadWord(root->data()._d.first,root->children());
+//    cout << "The Word: " << W.getTokenString() << endl;
     //Once it analyzes each of its children, find out which head word is for this node
     root->data()._d.second.setWord(W);
 }
@@ -257,6 +279,12 @@ void SyntaxTree::recurObj(TNpair* root, const Word& W, SyntaxObject S){
  * @return the head word
  */
 Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
+    if(W.size() == 1){
+//        std::cout << "For: " << phraseLookUp[g] << std::endl;
+//        std::cout << "The Word: " << (*W.begin())->data()._d.second.getWord() << std::endl;
+//        std::cout << "Word Type Size: " << (*W.begin())->data()._d.second.getWord().getTypes().size() << std::endl;
+        return (*W.begin())->data()._d.second.getWord();
+    }
     switch(g){
         case NOUNPHRASE:{
             Word hold;
@@ -301,6 +329,49 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             return hold;
             break;
         }
+        case INTPHRASE:{
+            Word hold;
+            for(std::size_t i = 0; i < W.size(); ++i){
+                WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
+                if(wt == preposition && W[i]->data()._d.first == WHWORD){ //NEEDS WordType WH
+                    return W[i]->data()._d.second.getWord();
+                }
+                if(wt == preposition && W[i]->data()._d.first == AUXILARY){
+                    hold = W[i]->data()._d.second.getWord();
+                }
+            }
+            return hold;
+            break;
+        }
+        case WHPHRASE:{
+            Word hold;
+            for(std::size_t i = 0; i < W.size(); ++i){
+                WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
+                if(wt == preposition && W[i]->data()._d.first == WHWORD){ //NEEDS WordType WH
+                    return W[i]->data()._d.second.getWord();
+                }
+                if(wt == preposition && W[i]->data()._d.first == WHWORD){
+                    hold = W[i]->data()._d.second.getWord();
+                }
+            }
+            return hold;
+            break;
+        }
+//        case AUXILARY:{
+//            Word hold;
+//            for(std::size_t i = 0; i < W.size(); ++i){
+//                WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
+//                if(wt == preposition && W[i]->data()._d.first == PREP){ //NEEDS WordType Prep
+//                    return W[i]->data()._d.second.getWord();
+//                }
+//                if(wt == preposition && W[i]->data()._d.first == PREPPHRASE){
+//                    hold = W[i]->data()._d.second.getWord();
+//                }
+//            }
+//            return hold;
+//            break;
+//        }
+
 
         default:{
 
@@ -331,11 +402,26 @@ TNpair *SyntaxTree::findPhrase(TNpair *start, GrammarPhrase find){
  * @param sentence the root
  */
 void SyntaxTree::setSubj(TNpair *sentence){
-    TNpair* r = findPhrase(sentence,NOUNPHRASE);
-    if(!r) return;
-    r->data()._d.second.setSyntax(SUBJECT);
-    Word W = r->data()._d.second.getWord();
-    recurObj(sentence,W,SUBJECT);
+    if(_st == DECLARATIVE){ //If its a declarative, then the subj is ALWAYS in front of the MV
+        TNpair* r = findPhrase(sentence,NOUNPHRASE);
+        if(!r) return;
+        r->data()._d.second.setSyntax(SUBJECT);
+        Word W = r->data()._d.second.getWord();
+        recurObj(sentence,W,SUBJECT);
+    }
+    else if(_st == INTERROGATIVE){ //If its a question, then:
+        TNpair* r = findPhrase(sentence,NOUNPHRASE);
+        if(_root->children()[1]->data()._d.first == VERBPHRASE){ //If it has no NP, then subj is in the inter phrase
+            r = findPhrase(sentence,INTPHRASE);
+        } //else it is in the noun phrase
+        if(!r) return;
+        r->data()._d.second.setSyntax(SUBJECT);
+        Word W = r->data()._d.second.getWord();
+        recurObj(sentence,W,SUBJECT);
+    }
+    else if(_st == IMPERATIVE){} //commands have no subject
+    else{}
+
 }
 
 /**
@@ -343,7 +429,7 @@ void SyntaxTree::setSubj(TNpair *sentence){
  * @param sentence the root
  */
 void SyntaxTree::setMV(TNpair *sentence){
-    sentence->data()._d.second.setSyntax(MAINVERB);
+    sentence->data()._d.second.setSyntax(MAINVERB); //MV is always the HW of the sentence
     recurObj(sentence,sentence->data()._d.second.getWord(),MAINVERB);
 }
 
@@ -352,13 +438,43 @@ void SyntaxTree::setMV(TNpair *sentence){
  * @param sentence the root
  */
 void SyntaxTree::setDO(TNpair *sentence){
-    TNpair* r = findPhrase(sentence,VERBPHRASE);
-    if(!r) return;
-    r = findPhrase(r,NOUNPHRASE);
-    if(!r) return;
-    r->data()._d.second.setSyntax(DIRECTOBJ);
-    Word W = r->data()._d.second.getWord();
-    recurObj(sentence,W,DIRECTOBJ);
+    if(_st == DECLARATIVE){ //For dec. the DO is the first noun to follow the verb
+        TNpair* r = findPhrase(sentence,VERBPHRASE);
+        if(!r) return;
+        r = findPhrase(r,NOUNPHRASE);
+        if(!r) return;
+        r->data()._d.second.setSyntax(DIRECTOBJ);
+        Word W = r->data()._d.second.getWord();
+        recurObj(sentence,W,DIRECTOBJ);
+    }
+    else if(_st == INTERROGATIVE){ //For Qs,
+        TNpair* r = findPhrase(sentence,VERBPHRASE);
+        if(_root->children()[1]->data()._d.first == NOUNPHRASE && _root->children()[2]->data()._d.first == VERBPHRASE){ //If S nas an NP and VP &
+            if(r->children()[1]->data()._d.first != NOUNPHRASE){ //If VP has no NP then DO is in IP
+                r = findPhrase(sentence,INTPHRASE);
+            }
+            else{//For the VP that has NP, the DO is in NP
+                r = findPhrase(sentence,NOUNPHRASE);
+            }
+        }//If S only has VP then DO is in VP if VP has an NP, otherwise it has none
+        else if(_root->children()[1]->data()._d.first == VERBPHRASE && _root->children().size() == 2){
+
+        }
+        else if(_root->children()[1]->data()._d.first == NOUNPHRASE && _root->children().size() == 2){
+            return; //If S has only NP, then it has no DO
+        }
+        else{}
+
+        if(!r) return;
+        r->data()._d.second.setSyntax(DIRECTOBJ);
+        Word W = r->data()._d.second.getWord();
+        recurObj(sentence,W,DIRECTOBJ);
+    }else if(_st == IMPERATIVE){
+
+    }
+    else{}
+
+
 }
 
 /**
@@ -366,14 +482,70 @@ void SyntaxTree::setDO(TNpair *sentence){
  * @param sentence the root
  */
 void SyntaxTree::setIDO(TNpair *sentence){
-    TNpair* r = findPhrase(sentence,VERBPHRASE);
+    if(_st == DECLARATIVE){ //For Dec., IDO is the noun of the PP
+        TNpair* r = findPhrase(sentence,VERBPHRASE);
+        if(!r) return;
+        r = findPhrase(r,PREPPHRASE);
+        if(!r) return;
+        r = findPhrase(r,NOUNPHRASE);
+        if(!r) return;
+        r->data()._d.second.setSyntax(INDIRECTOBJ);
+        Word W = r->data()._d.second.getWord();
+        recurObj(sentence,W,INDIRECTOBJ);
+    }
+    else if(_st == INTERROGATIVE){ //For Q,s
+        TNpair* r = findPhrase(sentence,VERBPHRASE);
+        if(_root->children()[1]->data()._d.first == NOUNPHRASE && _root->children()[2]->data()._d.first == VERBPHRASE){ //If S has VP and NP
+            if(r->children()[r->children().size() - 1]->data()._d.first == PREPPHRASE && //If VP has a PP AND PP only has a P (ie S ends with a P)
+                    r->children()[r->children().size() - 1]->children().size() == 1){
+                r = findPhrase(sentence,INTPHRASE); //Then the IDO is in IP
+            }
+            else if(r->children()[r->children().size() - 1]->data()._d.first == PREPPHRASE && //If VP has a PP but PP does not only have a P
+                    r->children()[r->children().size() - 1]->children().size() != 1){
+                r = findPhrase(sentence,PREPPHRASE);//Then IDO is in PP
+            }
+            else if(r->children()[r->children().size() - 1]->data()._d.first != PREPPHRASE){ //IF VP does not have a PP, then there is no IDO
+                return;
+            }
+        }
+        else if(_root->children()[1]->data()._d.first == VERBPHRASE && _root->children().size() == 2){ //IF s has only VP then IDO is in VP if any
+
+        }
+        else if(_root->children()[1]->data()._d.first == NOUNPHRASE && _root->children().size() == 2){ //If S only has a NP then there is no IDO
+            return;
+        }
+        else{}
+
+        if(!r) return;
+        r->data()._d.second.setSyntax(DIRECTOBJ);
+        Word W = r->data()._d.second.getWord();
+        recurObj(sentence,W,DIRECTOBJ);
+    }else if(_st == IMPERATIVE){
+
+    }
+    else{}
+
+}
+
+void SyntaxTree::setQ(TNpair *sentence){
+    //ONLY IN INTERROGATIVES
+    if(_st != INTERROGATIVE) return;
+    TNpair* r = findPhrase(sentence,WHPHRASE);
     if(!r) return;
-    r = findPhrase(r,PREPPHRASE);
-    if(!r) return;
-    r = findPhrase(r,NOUNPHRASE);
-    if(!r) return;
-    r->data()._d.second.setSyntax(INDIRECTOBJ);
+    r->data()._d.second.setSyntax(QWORD);
     Word W = r->data()._d.second.getWord();
-    recurObj(sentence,W,INDIRECTOBJ);
+    recurObj(sentence,W,QWORD);
+}
+
+void SyntaxTree::setAux(TNpair *sentence){
+    //FOR NOW ONLY IN INTERROGATIVES
+    if(_st != INTERROGATIVE) return;
+    TNpair* r = findPhrase(sentence,WHPHRASE);
+    if(!r) return;
+    r = findPhrase(r,AUXILARY);
+    if(!r) return;
+    r->data()._d.second.setSyntax(AUX);
+    Word W = r->data()._d.second.getWord();
+    recurObj(sentence,W,AUX);
 }
 
