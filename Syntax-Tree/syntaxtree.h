@@ -79,6 +79,7 @@ private:
     void setIDO(TNpair* sentence);
     void setQ(TNpair* sentence);
     void setAux(TNpair* sentence);
+    size_t hasDef(TNpair *phrase, GrammarPhrase g);
 
 public:
     SyntaxTree();
