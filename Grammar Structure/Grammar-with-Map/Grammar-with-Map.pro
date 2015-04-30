@@ -6,12 +6,14 @@ QT += sql
 CONFIG += c++11
 SOURCES += main.cpp \
     grammar.cpp \
-    cfgzero.cpp
+    cfgzero.cpp \
+    cfgq.cpp
 
 include(deployment.pri)
 qtcAddDeployment()
 
 HEADERS += \
     grammar.h \
-    cfgzero.h
+    cfgzero.h \
+    cfgq.h
 
