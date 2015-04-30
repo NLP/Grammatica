@@ -6,15 +6,7 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 
 -Find a general way to calculate the subject, verb, object of the syntax tree and sentence
 -Add cases for multiple nouns in noun phrase, verbs in verb phrase, etc.
--Change heaad word of Prep Phrase to the Prep
--Test the Syntax Tree
--Integrate the Word enums and structs with Grammar enums and structs
--Create Parser Class: Given a Grammar Structure and an Input, it will create all of 
-the possible trees (or paths) allowed by the Grammar Structure and will match it with the Input Sequence.
-It will then reduce the set of trees by checking if it correctly matches the structure of the input.
-It will then hold a small subset of the original set (Hopefully only 1 tree remains)
--The Paser will also identify the head verbs/nouns of each phrase and mark them on the syntax tree with Idenfitifers
-(This will be used to meaning representations and feature matrices)
+
 -Event Storage for actor, action, prop, supporting actor, location, time
 -Each actor, prop will also have location and time
 
