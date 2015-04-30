@@ -3,18 +3,11 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 
 # TODO:
 ```
+-Add a new Def S-> IP NP NP to allow sentences like Is he a person?
+-Add cases for this new type of question in Subj, DO, and IDO
+-Fix so that if it is a S->IP NP VP, then things like Is he dead will not incorrectly mark dead as the direct object
 
 -Find a general way to calculate the subject, verb, object of the syntax tree and sentence
--Add cases for multiple nouns in noun phrase, verbs in verb phrase, etc.
-
--Event Storage for actor, action, prop, supporting actor, location, time
--Each actor, prop will also have location and time
-
--Add new Rules for Wh-Questions
--Find a way to generate the head words and objects of questions
--Create enums for Wh-words and phrases
--Create a way to store and lookup meaning representations and events
--Find a way to identify what the questions is asking for and where to look
 
 -Add new Rules for Commands
 -Create functors for Key Commands like Find, Define, Show, Explain, etc...
@@ -115,6 +108,10 @@ Imperative Sentences (Commands):
 -Updated Grammar Class so that it flows better
 -Changed Grammar to Map (Should work perfectly)
 -Moved enums and structs to a single file or to their own files
+-Created Syntax Tree
+-Created Parser
+-Added Question Grammar Structure
+
 ```
 # Parsing Methods
 ```
