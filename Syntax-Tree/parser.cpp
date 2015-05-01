@@ -67,7 +67,7 @@ STvector Parser::parse(){
     while(recDescent(S,cutoff)){ //RecDescends based on the CURRENT pointer in the tree
 //        cout << "WE HAVE A TREE" << endl;
         _valid.insert(_valid.end(),S);
-//        std::cout << S << std::endl;
+        std::cout << S << std::endl;
 //        cout << "finding first incomplete of S" << endl;
         if(!findFirstIncomplete(S)){ //Sets the CURRENT to the first slowest subtree that has more defs to explore
             break; //If it cannot find any more subtrees with more defs to explore, then stop
@@ -190,11 +190,15 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //    if(S.getPhrase() == SENTENCE)
 //        c = 0;
 //    cout << "EHFIE" << endl;
-//    cout << "S so far: " << S << endl << endl;
-//    cout << "c = " << c << endl;
+    cout << "S so far: " << S << endl << endl;
+    cout << "c = " << c << endl;
+//    if(c == _words.size()){
+//        --c;
+//        return false;
+//    }
 //    cout << "Scur: " << *S.getCurrent() << endl;
 //    cout << "init def is " << (S.getDef().empty() ? "EMPTY":"NOT EMPTY") << endl;
-//    cout << "The phrase is " << phraseLookUp[S.getPhrase()] << endl;
+    cout << "The phrase is " << phraseLookUp[S.getPhrase()] << endl;
     GPlist def = getNextDef(S.getPhrase(),S.getDef());
 //    cout << "Def: ";
 //    for(std::size_t i = 0; i < def.size(); ++i){
@@ -207,17 +211,19 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //            cout << "S is at the last leaf" << endl;
              W = getNextWord(c + 1);
 //             cout << "The word at c+1: " << W << endl;
-            if(*W.getTypes().begin() != IGNORETHIS)
+            if(*W.getTypes().begin() != IGNORETHIS){
+//                --c;
                 return false;
+            }
 //            cout << "at the last word" << endl;
             W = getNextWord(c);
         }
         else
             W = getNextWord(c);
-//        cout << "Got the next word: " << W << endl;
+        cout << "Got the next word: " << W << endl;
         for(WordType cT = getNextType(W,IGNORETHIS); cT != IGNORETHIS; cT = getNextType(W,cT)){
             GrammarPhrase g = WTtoGP[cT];
-//            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
+            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
             if(S.getPhrase() == g){
 //                cout << "THERE IS A MATCH" << endl;
                 ++c;
@@ -238,17 +244,19 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
         bool check = false;
 //        cout << "Going into each child" << endl;
         for(std::size_t i = 0; i < S.childNum(); ++i){
-//            cout << "i: " << i << endl;
+            cout << "i: " << i << endl;
             S.shiftDown(i);
 //            cout << "shifted down to i" << endl;
 //            cout << *S.getCurrent() << endl;
             check = recDescent(S,c);
 //            cout << "Popped out of recursion" << endl;
             if(!check){
-//                cout << "recur returned false" << endl;
+                cout << "recur returned false" << endl;
                 S.shiftUp();
                 S.removeDef();
+//                if(i != 0) --i;
                 c -= i;
+                if(S.getPhrase() == SENTENCE) c = 0;
 //                cout << "removing children and STOP" << endl;
                 break;
             }

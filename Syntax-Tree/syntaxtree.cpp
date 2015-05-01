@@ -431,8 +431,20 @@ void SyntaxTree::setSubj(TNpair *sentence){
  * @param sentence the root
  */
 void SyntaxTree::setMV(TNpair *sentence){
-    sentence->data()._d.second.setSyntax(MAINVERB); //MV is always the HW of the sentence
-    recurObj(sentence,sentence->data()._d.second.getWord(),MAINVERB);
+    TNpair* r = findPhrase(sentence,VERBPHRASE);
+    if(!r){ //If there is no verb phrase, then the auxilary is the main verb
+        r = findPhrase(sentence,INTPHRASE);
+        r = findPhrase(r,AUXILARY);
+        if(!r) //If there is no auxilary, then there is no other verb SORRY
+            return;
+        r->data()._d.second.setSyntax(MAINVERB);
+        recurObj(sentence,r->data()._d.second.getWord(),MAINVERB);
+    }
+    else{
+        sentence->data()._d.second.setSyntax(MAINVERB); //MV is always the HW of the sentence
+        recurObj(sentence,sentence->data()._d.second.getWord(),MAINVERB);
+    }
+
 }
 
 /**
@@ -472,6 +484,7 @@ void SyntaxTree::setDO(TNpair *sentence){
         else{}
 
         if(!r) return;
+        if(r->data()._d.second.getSyntax() != ST_INVALID) return;
         r->data()._d.second.setSyntax(DIRECTOBJ);
         Word W = r->data()._d.second.getWord();
         recurObj(sentence,W,DIRECTOBJ);
