@@ -203,7 +203,7 @@ SentenceType SyntaxTree::getSentenceType() const{
 }
 
 SyntaxObject SyntaxTree::askingFor(){
-    if(_st != INTERROGATIVE) return S_INVALID;
+    if(_st != INTERROGATIVE) return S_NONE;
     else{
         TNpair* r = findPhrase(_root,INTPHRASE);
         if(!r) return S_INVALID;
