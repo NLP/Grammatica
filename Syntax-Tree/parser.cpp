@@ -67,7 +67,8 @@ STvector Parser::parse(){
     while(recDescent(S,cutoff)){ //RecDescends based on the CURRENT pointer in the tree
 //        cout << "WE HAVE A TREE" << endl;
         _valid.insert(_valid.end(),S);
-        std::cout << S << std::endl;
+//        std::cout << S << std::endl;
+//        cin.get();
 //        cout << "finding first incomplete of S" << endl;
         if(!findFirstIncomplete(S)){ //Sets the CURRENT to the first slowest subtree that has more defs to explore
             break; //If it cannot find any more subtrees with more defs to explore, then stop
@@ -81,7 +82,7 @@ STvector Parser::parse(){
 //        cout << "removed partial" << endl;
     } //As long as recdescent is able to continue making trees
 //    std::cout << "After while" << std::endl;
-    using namespace std;
+//    using namespace std;
     for(std::size_t i = 0; i < _valid.size(); ++i){
         assignType(_valid[i]);
         attachWords(_valid[i]);
@@ -131,7 +132,8 @@ bool Parser::findFirstIncomplete(SyntaxTree& S){
 void Parser::removePartial(SyntaxTree &S){
     TNpair* c = S.getCurrent();
     S.shiftToRoot();
-    S = removePartial(S.getCurrent(),c);
+    bool f = false;
+    S = removePartial(S.getCurrent(),c,f);
     S.shiftTo(c);
 //    cout << "Partially Removed: " << S << endl;
 
@@ -166,15 +168,43 @@ void Parser::removePartial(SyntaxTree &S){
  * @param target the current
  * @return the new tree
  */
-TNpair* Parser::removePartial(TNpair *root, TNpair *target){
+TNpair* Parser::removePartial(TNpair *root, TNpair *target, bool& found){
+//    using namespace std;
+//    cout << "in remove Partial" << endl;
+//    cout << "Root: " << *root << endl;
+//    cout << "Target: " << *target << endl;
+//    cout << "found: " << found << endl;
+//    if(target == root){
+//        for(std::size_t i = 0; i < root->children().size(); ++i){
+//            child.insert(child.end(),removePartial(root->children()[i],target,found));
+//        }
+//        found = true;
+//        return new TNpair(root->data(),child);
+//    }
     TNpair::TNvector child;
     for(std::size_t i = 0; i < root->children().size(); ++i){
-        if(target == root->children()[i]){
-            child.insert(child.end(),removePartial(root->children()[i],target));
-            break;
+//        cout << "Child: " << i << endl;
+//        child.insert(child.end(),removePartial(root->children()[i],target,found));
+//        if(target == root->children()[i]){
+//            cout << "found the target" << endl;
+//            child.insert(child.end(),removePartial(root->children()[i],target,found));
+//            cout << "all children of target done" << endl;
+//            found = true;
+//            break;
+//        }
+        if(!found){
+//            cout << "found false" << endl;
+            child.insert(child.end(),removePartial(root->children()[i],target,found));
+//            cout << "Added the child of " << i << endl;
         }
-        child.insert(child.end(),removePartial(root->children()[i],target));
+        else{
+//            cout << "found true" << endl;
+            child.insert(child.end(),new TNpair(root->children()[i]->data()));
+//            cout << "Added just the data of " << i << endl;
+        }
     }
+    if(target == root) found = true;
+//    cout << "Returning a copy of itself " << endl;
     return new TNpair(root->data(),child);
 }
 
@@ -186,25 +216,27 @@ TNpair* Parser::removePartial(TNpair *root, TNpair *target){
  * @return True if it is successful, False otherwise
  */
 bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
+//    cin.get();
 //    cout << "in RecDescent" << endl;
 //    if(S.getPhrase() == SENTENCE)
 //        c = 0;
 //    cout << "EHFIE" << endl;
-    cout << "S so far: " << S << endl << endl;
-    cout << "c = " << c << endl;
+//    cout << "S so far: " << S << endl << endl;
+//    cout << "c = " << c << endl;
 //    if(c == _words.size()){
 //        --c;
 //        return false;
 //    }
 //    cout << "Scur: " << *S.getCurrent() << endl;
 //    cout << "init def is " << (S.getDef().empty() ? "EMPTY":"NOT EMPTY") << endl;
-    cout << "The phrase is " << phraseLookUp[S.getPhrase()] << endl;
+//    cout << "The phrase is " << phraseLookUp[S.getPhrase()] << endl;
+//    if(S.leafNum() > _words.size()) return false;
     GPlist def = getNextDef(S.getPhrase(),S.getDef());
 //    cout << "Def: ";
 //    for(std::size_t i = 0; i < def.size(); ++i){
 //        cout << def[i] << "|";
 //    }cout << endl;
-    if(def.empty()){
+    if(def.empty() && S.getDef().empty()){
 //        cout << "Def is empty OR root is leaf" << endl;
         Word W;
         if(S.atLastLeaf()){
@@ -220,10 +252,10 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
         }
         else
             W = getNextWord(c);
-        cout << "Got the next word: " << W << endl;
+//        cout << "Got the next word: " << W << endl;
         for(WordType cT = getNextType(W,IGNORETHIS); cT != IGNORETHIS; cT = getNextType(W,cT)){
             GrammarPhrase g = WTtoGP[cT];
-            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
+//            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
             if(S.getPhrase() == g){
 //                cout << "THERE IS A MATCH" << endl;
                 ++c;
@@ -238,27 +270,79 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //    cout << "Def is not leaf" << endl;
     while(!def.empty()){
 //        cout << "def is still avail" << endl;
-        S.addDef(def);
+        if(S.getDef().empty()) S.addDef(def);
+
 //        cout << "Added def" << endl;
 //        cout << "S with added def: " << S << endl;
         bool check = false;
 //        cout << "Going into each child" << endl;
         for(std::size_t i = 0; i < S.childNum(); ++i){
-            cout << "i: " << i << endl;
+//            cout << "i: " << i << endl;
             S.shiftDown(i);
+//            cout << "The CHild: " << *S.getCurrent() << endl;
 //            cout << "shifted down to i" << endl;
 //            cout << *S.getCurrent() << endl;
             check = recDescent(S,c);
 //            cout << "Popped out of recursion" << endl;
-            if(!check){
-                cout << "recur returned false" << endl;
+//            cin.get();
+            if(!check && i != 0){
+                S.shiftUp();
+//                cout << "recur returned false" << endl;
+//                cout << "Not first child" << endl;
+//                c -= i;
+//                cout << "Now C: " << c << endl;
+//                 --c;
+//                cout << "C after first check: " << c << endl;
+
+//                cout << "i here: " << i << endl;
+                if(S.getChildAt(i-1) && !S.getChildAt(i-1)->isLeaf()){
+                    c -= rt::leaves(S.getChildAt(i-1));
+                    i -= 2;
+
+                }
+                else{
+                    while(i > 0 && S.getChildAt(i-1) && S.getChildAt(i-1)->isLeaf()){
+    //                    cout << "In while" << endl;
+    //                    cout << "i: " << i << endl;
+    //                    cout << "c: " << c << endl;
+                        --c;
+                        --i;
+                    }
+                    if(i == 0){
+
+                        S.removeDef();
+                        break;
+                    }
+                }
+
+
+//                cout << "C: " << c << endl;
+//                cout << "I: " << i << endl;
+
+                S.shiftDown(0);
+//                --i;
+
+//                i -= 2;
+            }
+            else if(!check && i == 0){
+//                cout << "recur returned false" << endl;
+//                cout << "First child" << endl;
+
+                //Got to its previous child
+                //Recur that child again
+//                c -= rt::leaves(S.getCurrent());
                 S.shiftUp();
                 S.removeDef();
-//                if(i != 0) --i;
-                c -= i;
-                if(S.getPhrase() == SENTENCE) c = 0;
-//                cout << "removing children and STOP" << endl;
                 break;
+//                if(S.getPhrase() == SENTENCE) c = 0;
+//                if(i == 0)
+
+//                else --i;
+//                if(i != 0) --i;
+
+
+//                cout << "removing children and STOP" << endl;
+//                break;
             }
             S.shiftUp();
 //            cout << "shifted back up" << endl;
@@ -269,12 +353,14 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
             return true;
         }
         def = getNextDef(S.getPhrase(),def);
+//        if(S.getCurrent()->data()._d.first == SENTENCE)c = 0;
 //        cout << "Got next def: ";
 //        for(std::size_t i = 0; i < def.size(); ++i){
 //            cout << def[i] << "|";
 //        }cout << endl;
     }
 //    cout << "No more defs for this phrase and no successful recur, returning false" << endl;
+
     return false;
 }
 

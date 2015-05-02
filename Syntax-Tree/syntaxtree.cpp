@@ -110,6 +110,12 @@ TNpair* SyntaxTree::getFirstLeaf(){
     return leaf;
 }
 
+TNpair *SyntaxTree::getChildAt(size_t i){
+    if(i >= 0 && i < _current->children().size())
+        return _current->children()[i];
+    else return nullptr;
+}
+
 /**
  * @brief SyntaxTree::atLastLeaf Checks if current is at the last leaf
  * @return True if it is, False otherwise
@@ -175,6 +181,7 @@ std::vector<SyntaxWord> SyntaxTree::getAll() const{
     std::vector<SyntaxWord> All;
     std::vector<TNpair*> L = rt::allLeaves(_root);
     for(std::size_t i = 0; i < L.size(); ++i){
+//        std::cout << "ingetAll: " << L[i]->data()._d.second << endl;
         All.insert(All.end(),L[i]->data()._d.second);
     }
     return All;

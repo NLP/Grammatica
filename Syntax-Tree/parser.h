@@ -47,7 +47,7 @@ private:
     void removePartial(SyntaxTree& S);
 
 
-    TNpair *removePartial(TNpair* root, TNpair* target);
+    TNpair *removePartial(TNpair* root, TNpair* target, bool &found);
 
     Word getNextWord(std::size_t i);
     GPlist getNextDef(GrammarPhrase g, GPlist def);

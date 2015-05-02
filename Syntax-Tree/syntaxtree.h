@@ -102,6 +102,7 @@ public:
     bool atLeaf();
     TNpair* getLastLeaf();
     TNpair* getFirstLeaf();
+    TNpair* getChildAt(std::size_t i);
     bool atLastLeaf();
     bool atFirstLeaf();
     std::size_t leavesBefore();
