@@ -431,6 +431,12 @@ void SyntaxTree::setSubj(TNpair *sentence){
             if(*t->data()._d.second.getWord().getTypes().begin()!= verb)
                 r = t;
         } //else it is in the noun phrase
+        else if(childIndex(_root,findPhrase(_root,NOUNPHRASE))>
+                           childIndex(_root,findPhrase(_root,VERBPHRASE))){
+            TNpair* t = findPhrase(sentence,INTPHRASE);
+            if(*t->data()._d.second.getWord().getTypes().begin()!= verb)
+                r = t;
+        }
         if(!r) return;
         r->data()._d.second.setSyntax(SUBJECT);
         Word W = r->data()._d.second.getWord();
