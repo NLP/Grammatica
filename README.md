@@ -6,7 +6,7 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 -Add a new Def S-> IP NP NP to allow sentences like Is he a person?
 -Add cases for this new type of question in Subj, DO, and IDO
 -Add a case for when the the questions asks for MV: What does he do, What is he doing, (ie forms of do replace the MV)
-
+-There is a bug for questions like Who kicked the ball, etc where Who is not being correctly identified as the subject. Also some parse trees are also parsed with incomplete sentences. For example for the Question Who kicked the ball?, it would parse out a tree for Who kicked, ignoring the last two words. For Who kicked the ball to Mark, it ignores to mark and parses out Who kicked the ball
 -Find a general way to calculate the subject, verb, object of the syntax tree and sentence
 
 -Add new Rules for Commands
