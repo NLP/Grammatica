@@ -5,6 +5,7 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 ```
 -Add a new Def S-> IP NP NP to allow sentences like Is he a person?
 -Add cases for this new type of question in Subj, DO, and IDO
+-Add a case for when the the questions asks for MV: What does he do, What is he doing, (ie forms of do replace the MV)
 
 -Find a general way to calculate the subject, verb, object of the syntax tree and sentence
 
