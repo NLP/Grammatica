@@ -478,11 +478,7 @@ void Parser::removeTrees(){
  * @return  the word, or an IGNORETHIS word if not valid
  */
 Word Parser::getNextWord(std::size_t i){
-//    cout << "size of words: " << _words.size() << endl;
-    if(i >= _words.size()){
-        return Word();
-    }
-//    cout << "words at c: " << _words[i] << endl;
+    if(i >= _words.size()) return Word();
     return _words[i];
 }
 
