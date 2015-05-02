@@ -202,6 +202,23 @@ SentenceType SyntaxTree::getSentenceType() const{
     return _st;
 }
 
+SyntaxObject SyntaxTree::askingFor(){
+    if(_st != INTERROGATIVE) return S_INVALID;
+    else{
+        TNpair* r = findPhrase(_root,INTPHRASE);
+        if(!r) return S_INVALID;
+        GtSpair iden = (*r->children().begin())->data();
+        if(iden._d.first == AUXILARY)
+            return AUX;
+        else if(iden._d.first == WHPHRASE &&
+                getObj(MAINVERB).begin()->getWord().getTokenString().compare("do") == 0)
+            return MAINVERB;
+        else if(iden._d.first == WHPHRASE)
+            return iden._d.second.getSyntax();
+        else return S_INVALID;
+    }
+}
+
 /**
  * @brief SyntaxTree::assignHeads assigns the head words to each node
  */

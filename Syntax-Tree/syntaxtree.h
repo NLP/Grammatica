@@ -111,6 +111,7 @@ public:
     std::vector<SyntaxWord> getAll() const;
     std::vector<SyntaxWord> getObj(SyntaxObject S) const;
     SentenceType getSentenceType() const;
+    SyntaxObject askingFor();
 };
 
 

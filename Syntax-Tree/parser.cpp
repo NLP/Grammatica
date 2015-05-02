@@ -91,6 +91,7 @@ STvector Parser::parse(){
 //        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
 //        cout << _valid[i] << endl;
     }
+    removeTrees();
 //    for(std::size_t i = 0; i < _valid.size(); ++i){
 //        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
 //        cout << _valid[i] << endl;
@@ -345,6 +346,10 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //                cout << "removing children and STOP" << endl;
 //                break;
             }
+            if(!S.getParent(S.getCurrent())){
+//                cout <<"For some reason it is already all the way at root" << endl;
+                if(check && S.leafNum() == _words.size()) return true;
+            }
             S.shiftUp();
 //            cout << "shifted back up" << endl;
 //            cout << *S.getCurrent() << endl;
@@ -414,6 +419,17 @@ void Parser::assignType(SyntaxTree &S){
 void Parser::removeAllOtherTypes(Word &W, WordType trueType){
     W = Word(Token(W.getTokenString(),ALPHA),{trueType},W.getDefinitions());
 
+}
+
+void Parser::removeTrees(){
+    STvector::iterator it = _valid.begin();
+    for(std::size_t i = 0; i < _valid.size(); ++i,++it){
+        if(_valid[i].leafNum() != _words.size()){
+            _valid.erase(it);
+            --i;
+            --it;
+        }
+    }
 }
 
 /**
