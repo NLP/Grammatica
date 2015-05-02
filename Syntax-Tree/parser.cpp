@@ -67,8 +67,8 @@ STvector Parser::parse(){
     while(recDescent(S,cutoff)){ //RecDescends based on the CURRENT pointer in the tree
 //        cout << "WE HAVE A TREE" << endl;
         _valid.insert(_valid.end(),S);
-        std::cout << S << std::endl;
-        cin.get();
+//        std::cout << S << std::endl;
+//        cin.get();
 //        cout << "finding first incomplete of S" << endl;
         if(!findFirstIncomplete(S)){ //Sets the CURRENT to the first slowest subtree that has more defs to explore
             break; //If it cannot find any more subtrees with more defs to explore, then stop
@@ -216,13 +216,13 @@ TNpair* Parser::removePartial(TNpair *root, TNpair *target, bool& found){
  * @return True if it is successful, False otherwise
  */
 bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
-    cin.get();
+//    cin.get();
 //    cout << "in RecDescent" << endl;
 //    if(S.getPhrase() == SENTENCE)
 //        c = 0;
 //    cout << "EHFIE" << endl;
-    cout << "S so far: " << S << endl << endl;
-    cout << "c = " << c << endl;
+//    cout << "S so far: " << S << endl << endl;
+//    cout << "c = " << c << endl;
 //    if(c == _words.size()){
 //        --c;
 //        return false;
@@ -240,7 +240,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //        cout << "Def is empty OR root is leaf" << endl;
         Word W;
         if(S.atLastLeaf()){
-            cout << "S is at the last leaf" << endl;
+//            cout << "S is at the last leaf" << endl;
              W = getNextWord(c + 1);
 //             cout << "The word at c+1: " << W << endl;
             if(*W.getTypes().begin() != IGNORETHIS){
@@ -252,12 +252,12 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
         }
         else
             W = getNextWord(c);
-        cout << "Got the next word: " << W << endl;
+//        cout << "Got the next word: " << W << endl;
         for(WordType cT = getNextType(W,IGNORETHIS); cT != IGNORETHIS; cT = getNextType(W,cT)){
             GrammarPhrase g = WTtoGP[cT];
-            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
+//            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
             if(S.getPhrase() == g){
-                cout << "THERE IS A MATCH" << endl;
+//                cout << "THERE IS A MATCH" << endl;
                 ++c;
                 return true;
             }
@@ -277,9 +277,9 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
         bool check = false;
 //        cout << "Going into each child" << endl;
         for(std::size_t i = 0; i < S.childNum(); ++i){
-            cout << "i: " << i << endl;
+//            cout << "i: " << i << endl;
             S.shiftDown(i);
-            cout << "The CHild: " << *S.getCurrent() << endl;
+//            cout << "The CHild: " << *S.getCurrent() << endl;
 //            cout << "shifted down to i" << endl;
 //            cout << *S.getCurrent() << endl;
             check = recDescent(S,c);
@@ -288,7 +288,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
             if(!check && i != 0){
                 S.shiftUp();
 //                cout << "recur returned false" << endl;
-                cout << "Not first child" << endl;
+//                cout << "Not first child" << endl;
 //                c -= i;
 //                cout << "Now C: " << c << endl;
 //                 --c;
@@ -317,8 +317,8 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
                 }
 
 
-                cout << "C: " << c << endl;
-                cout << "I: " << i << endl;
+//                cout << "C: " << c << endl;
+//                cout << "I: " << i << endl;
 
                 S.shiftDown(i); //Previously 0
 //                --i;
@@ -327,7 +327,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
             }
             else if(!check && i == 0){
 //                cout << "recur returned false" << endl;
-                cout << "First child" << endl;
+//                cout << "First child" << endl;
 
                 //Got to its previous child
                 //Recur that child again
@@ -360,7 +360,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //            cout << def[i] << "|";
 //        }cout << endl;
     }
-    cout << "No more defs for this phrase and no successful recur, returning false" << endl;
+//    cout << "No more defs for this phrase and no successful recur, returning false" << endl;
 
     return false;
 }
