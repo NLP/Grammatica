@@ -30,5 +30,7 @@ public:
         out << S._word << ": " << syntaxLookUp[S._so];
         return out;
     }
+
+    SyntaxWord& operator = (const SyntaxWord& other);
 };
 #endif // SYNTAXWORD_H

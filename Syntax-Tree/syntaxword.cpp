@@ -75,3 +75,13 @@ void SyntaxWord::setSyntax(SyntaxObject S){
 SyntaxObject SyntaxWord::getSyntax(){
     return _so;
 }
+
+/**
+ * @brief SyntaxWord::operator =
+ * @param other
+ * @return self
+ */
+SyntaxWord &SyntaxWord::operator =(const SyntaxWord &other) {
+    _so = other.getSyntax ();
+    _word = other.getWord ();
+}
