@@ -56,7 +56,7 @@ void SyntaxWord::setWord(const Word& W){
  * @brief SyntaxWord::getWord Returns the word
  * @return the word
  */
-Word SyntaxWord::getWord(){
+Word SyntaxWord::getWord() const{
     return _word;
 }
 
@@ -72,7 +72,7 @@ void SyntaxWord::setSyntax(SyntaxObject S){
  * @brief SyntaxWord::getSyntax Returns the Syntax
  * @return the Syntax
  */
-SyntaxObject SyntaxWord::getSyntax(){
+SyntaxObject SyntaxWord::getSyntax() const{
     return _so;
 }
 

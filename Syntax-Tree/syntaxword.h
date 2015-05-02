@@ -23,9 +23,9 @@ public:
     SyntaxWord(const SyntaxObject& so, const Word& word);
     bool isHeadWord(const GrammarPhrase& gp) const;
     void setWord(const Word& W);
-    Word getWord();
+    Word getWord() const;
     void setSyntax(SyntaxObject S);
-    SyntaxObject getSyntax();
+    SyntaxObject getSyntax() const;
     friend std::ostream& operator <<(std::ostream& out, const SyntaxWord& S){
         out << S._word << ": " << syntaxLookUp[S._so];
         return out;
