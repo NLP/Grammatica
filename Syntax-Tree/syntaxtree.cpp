@@ -110,6 +110,11 @@ TNpair* SyntaxTree::getFirstLeaf(){
     return leaf;
 }
 
+/**
+ * @brief SyntaxTree::getChildAt gets the child at index of current
+ * @param i the index
+ * @return the child
+ */
 TNpair *SyntaxTree::getChildAt(size_t i){
     if(i >= 0 && i < _current->children().size())
         return _current->children()[i];
@@ -177,6 +182,10 @@ size_t SyntaxTree::childIndex(TNpair* parent,TNpair *child){
     return -1;
 }
 
+/**
+ * @brief SyntaxTree::getAll Gets all of the syntax words
+ * @return the vector
+ */
 std::vector<SyntaxWord> SyntaxTree::getAll() const{
     std::vector<SyntaxWord> All;
     std::vector<TNpair*> L = rt::allLeaves(_root);
@@ -187,6 +196,11 @@ std::vector<SyntaxWord> SyntaxTree::getAll() const{
     return All;
 }
 
+/**
+ * @brief SyntaxTree::getObj Gets all of the instances of the syntax object
+ * @param S the syntax object
+ * @return  the vector
+ */
 std::vector<SyntaxWord> SyntaxTree::getObj(SyntaxObject S) const{
     std::vector<SyntaxWord> Obj;
     std::vector<TNpair*> L = rt::allLeaves(_root);
@@ -198,10 +212,18 @@ std::vector<SyntaxWord> SyntaxTree::getObj(SyntaxObject S) const{
     return Obj;
 }
 
+/**
+ * @brief SyntaxTree::getSentenceType gets the sentence type
+ * @return sentence type
+ */
 SentenceType SyntaxTree::getSentenceType() const{
     return _st;
 }
 
+/**
+ * @brief SyntaxTree::askingFor Gets the syntaxobject the question is asking for, if it is a question
+ * @return syntax object
+ */
 SyntaxObject SyntaxTree::askingFor(){
     if(_st != INTERROGATIVE) return S_NONE;
     else{
@@ -211,7 +233,7 @@ SyntaxObject SyntaxTree::askingFor(){
         if(iden._d.first == AUXILARY)
             return AUX;
         else if(iden._d.first == WHPHRASE &&
-                getObj(MAINVERB).begin()->getWord().getTokenString().compare("do") == 0)
+                !getObj(MAINVERB).empty() && getObj(MAINVERB).begin()->getWord().getTokenString().compare("do") == 0)
             return MAINVERB;
         else if(iden._d.first == WHPHRASE)
             return iden._d.second.getSyntax();
@@ -238,6 +260,9 @@ void SyntaxTree::assignObjects(){
 //    setQ(Tpair::_root);
 }
 
+/**
+ * @brief SyntaxTree::determineType Determines sentence type
+ */
 void SyntaxTree::determineType(){
     TNpair::TNvector def = Tpair::_root->children();
     if((*def.begin())->data()._d.first == INTPHRASE)
@@ -593,6 +618,10 @@ void SyntaxTree::setIDO(TNpair *sentence){
 
 }
 
+/**
+ * @brief SyntaxTree::setQ Sets the Question word//NOT NEEDED
+ * @param sentence
+ */
 void SyntaxTree::setQ(TNpair *sentence){
     //ONLY IN INTERROGATIVES
     if(_st != INTERROGATIVE) return;
@@ -615,6 +644,12 @@ void SyntaxTree::setAux(TNpair *sentence){
     recurObj(sentence,W,AUX);
 }
 
+/**
+ * @brief SyntaxTree::hasDef Checks if the phrase has a definition
+ * @param phrase the phrase
+ * @param g the def
+ * @return True if found, False otherwise
+ */
 std::size_t SyntaxTree::hasDef(TNpair *phrase, GrammarPhrase g){
     for(std::size_t i = 0; i < phrase->children().size(); ++i){
         if(phrase->children()[i]->data()._d.first == g) return i;

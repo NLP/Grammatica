@@ -67,6 +67,9 @@ typedef Tree<GtSpair> Tpair;
  */
 class SyntaxTree: public Tree<GtSpair>{
 private:
+    /**
+     * @brief _st the sentence type
+     */
     SentenceType _st;
     void recurHead(TNpair* root);
     void recurObj(TNpair* root, const Word &W, SyntaxObject S);

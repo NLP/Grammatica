@@ -84,6 +84,7 @@ STvector Parser::parse(){
 //    std::cout << "After while" << std::endl;
 //    using namespace std;
     for(std::size_t i = 0; i < _valid.size(); ++i){
+        _valid[i].shiftToRoot();
         assignType(_valid[i]);
         attachWords(_valid[i]);
         assignHeadWords(_valid[i]);
@@ -99,10 +100,21 @@ STvector Parser::parse(){
     return _valid;
 }
 
+/**
+ * @brief Parser::getAll returns a vector of all syntax words
+ * @param S the syntax tree
+ * @return the vector
+ */
 std::vector<SyntaxWord> Parser::getAll(const SyntaxTree &S){
     return S.getAll();
 }
 
+/**
+ * @brief Parser::getObj returns a vector of the syntax
+ * @param S the syntax tree
+ * @param O the syntax object
+ * @return the vector
+ */
 std::vector<SyntaxWord> Parser::getObj(const SyntaxTree &S, SyntaxObject O){
     return S.getObj(O);
 }
@@ -411,16 +423,28 @@ void Parser::assignObjects(SyntaxTree& S){
     S.assignObjects();
 }
 
+/**
+ * @brief Parser::assignType sets the sentence type
+ * @param S syntax tree
+ */
 void Parser::assignType(SyntaxTree &S){
     S.determineType();
 //    std::cout << "ASSIGNTYPE: " << sentenceLookUp[S.getSentenceType()] << std::endl;
 }
 
+/**
+ * @brief Parser::removeAllOtherTypes removes all other types for the words
+ * @param W Word
+ * @param trueType the actual type
+ */
 void Parser::removeAllOtherTypes(Word &W, WordType trueType){
     W = Word(Token(W.getTokenString(),ALPHA),{trueType},W.getDefinitions());
 
 }
 
+/**
+ * @brief Parser::removeTrees removes certain trees that do not have the same length as the sentence
+ */
 void Parser::removeTrees(){
     STvector::iterator it = _valid.begin();
     for(std::size_t i = 0; i < _valid.size(); ++i,++it){
@@ -428,6 +452,22 @@ void Parser::removeTrees(){
             _valid.erase(it);
             --i;
             --it;
+        }
+    }
+    it = _valid.begin();
+    for(std::size_t i = 0; i < _valid.size(); ++i, ++it){
+        if(_valid[i].getSentenceType() == INTERROGATIVE){
+            TNpair* f = _valid[i].getFirstLeaf();
+            if(f->data()._d.first == WHWORD){
+                std::string w = f->data()._d.second.getWord().getTokenString();
+                if((w.compare("Who") == 0 || w.compare("What") == 0 ||
+                        w.compare("Where") == 0 || w.compare("When") == 0)
+                        && f->data()._d.second.getSyntax() == S_INVALID){
+                    _valid.erase(it);
+                    --i;
+                    --it;
+                }
+            }
         }
     }
 }
