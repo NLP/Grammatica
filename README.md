@@ -5,7 +5,6 @@ Join our online chat at [![Gitter](https://badges.gitter.im/NLP/gitter.svg)](htt
 ```
 -Add a new Def S-> IP NP NP to allow sentences like Is he a person?
 -Add cases for this new type of question in Subj, DO, and IDO
--Fix Backtract when it sees one of the latter childs of a def return false, giving up everything. It should go back to its previous child of the def and try the next def of that. If that has no more defs, then go to the previous child again, and keep going until no more previous children. THEN it can remove the entire def and get next def for node.
 
 -Find a general way to calculate the subject, verb, object of the syntax tree and sentence
 
