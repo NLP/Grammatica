@@ -374,7 +374,15 @@ void Parser::attachWords(SyntaxTree& S){
     TNpair::TNvector::iterator it = L.begin();
     while(it != L.end()){
         Word W = getNextWord(i);
+//        cout << "Word: " << W << endl;
+//        for(std::set<WordType>::iterator it = W.getTypes().begin(); it != W.getTypes().end(); ++it){
+//            std::cout << WordStringMap[*it] << endl;
+//        }
         removeAllOtherTypes(W,GPtoWT[(*it)->data()._d.first]);
+//        cout << "removed all" << endl;
+//        for(std::set<WordType>::iterator it = W.getTypes().begin(); it != W.getTypes().end(); ++it){
+//            std::cout << WordStringMap[*it] << endl;
+//        }
         (*it)->data()._d.second.setWord(W);
         ++it;
         ++i;

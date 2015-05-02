@@ -215,6 +215,7 @@ void SyntaxTree::assignObjects(){
     setSubj(Tpair::_root);
     setMV(Tpair::_root);
     setDO(Tpair::_root);
+//    cout << *_root << endl;
     setIDO(Tpair::_root);
 //    setAux(Tpair::_root);
 //    setQ(Tpair::_root);
@@ -339,11 +340,18 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
         case INTPHRASE:{
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
+//                                    cout << "W: " << W[i]->data()._d.second.getWord() << endl;
+//                for(std::set<WordType>::iterator it = W[i]->data()._d.second.getWord().getTypes().begin(); it != W[i]->data()._d.second.getWord().getTypes().end(); ++it){
+//                    std::cout << WordStringMap[*it] << endl;
+//                }
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == preposition && W[i]->data()._d.first == WHWORD){ //NEEDS WordType WH
+//                cout << WordStringMap[wt] << endl;
+                if(wt == question && W[i]->data()._d.first == WHPHRASE){ //NEEDS WordType WH
+//                    cout << "Is q. and is WH" << endl;
+
                     return W[i]->data()._d.second.getWord();
                 }
-                if(wt == preposition && W[i]->data()._d.first == AUXILARY){
+                if(wt == verb && W[i]->data()._d.first == AUXILARY){
                     hold = W[i]->data()._d.second.getWord();
                 }
             }
@@ -354,10 +362,10 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == preposition && W[i]->data()._d.first == WHWORD){ //NEEDS WordType WH
+                if(wt == question && W[i]->data()._d.first == WHWORD){ //NEEDS WordType WH
                     return W[i]->data()._d.second.getWord();
                 }
-                if(wt == preposition && W[i]->data()._d.first == WHWORD){
+                if(wt == question && W[i]->data()._d.first == WHWORD){
                     hold = W[i]->data()._d.second.getWord();
                 }
             }
@@ -473,7 +481,12 @@ void SyntaxTree::setDO(TNpair *sentence){
         if(hasDef(_root,NOUNPHRASE) != -1 && hasDef(_root,VERBPHRASE) != -1){ //If S nas an NP and VP &
             if(hasDef(r,NOUNPHRASE) == -1){ //If VP has no NP then DO is in IP
                 TNpair* t = findPhrase(sentence,INTPHRASE);
-                if(*t->data()._d.second.getWord().getTypes().begin() != verb)
+//                std::cout << *t << std::endl;
+//                std::cout << *t->data()._d.second.getWord() << endl;
+//                std::cout << WordStringMap[*t->data()._d.second.getWord().getTypes().begin()] << std::endl;
+//                cout << phraseLookUp[getLastLeaf()->data()._d.first] << endl;
+                if(getLastLeaf()->data()._d.first == PREP)return; //If the last word is a prep, then if there is NO NP in the VP then there is no DO as the Wh in the IP refers to the IDO
+                if(*t->data()._d.second.getWord().getTypes().begin() == question)
                     r = t;
             }
             else{//For the VP that has NP, the DO is in NP
@@ -489,7 +502,7 @@ void SyntaxTree::setDO(TNpair *sentence){
             return; //If S has only NP, then it has no DO
         }
         else{}
-
+//        cout << "HELLO" << endl;
         if(!r) return;
         if(r->data()._d.second.getSyntax() != ST_INVALID) return;
         r->data()._d.second.setSyntax(DIRECTOBJ);
@@ -547,9 +560,9 @@ void SyntaxTree::setIDO(TNpair *sentence){
         else{}
 
         if(!r) return;
-        r->data()._d.second.setSyntax(DIRECTOBJ);
+        r->data()._d.second.setSyntax(INDIRECTOBJ);
         Word W = r->data()._d.second.getWord();
-        recurObj(sentence,W,DIRECTOBJ);
+        recurObj(sentence,W,INDIRECTOBJ);
     }else if(_st == IMPERATIVE){
 
     }
