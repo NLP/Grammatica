@@ -75,7 +75,7 @@ private:
     void recurObj(TNpair* root, const Word &W, SyntaxObject S);
     Word getHeadWord(GrammarPhrase g, TNpair::TNvector W);
 
-    TNpair* findPhrase(TNpair *start, GrammarPhrase find);
+    TNpair* findPhrase(TNpair *start, GrammarPhrase find) const;
     void setSubj(TNpair* sentence);
     void setMV(TNpair* sentence);
     void setDO(TNpair* sentence);

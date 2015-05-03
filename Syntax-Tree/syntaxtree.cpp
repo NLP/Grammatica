@@ -393,7 +393,7 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
  * @param find the phras
  * @return the pointer to the node, OR nullptr if not found
  */
-TNpair *SyntaxTree::findPhrase(TNpair *start, GrammarPhrase find){
+TNpair *SyntaxTree::findPhrase(TNpair *start, GrammarPhrase find) const{
     for(std::size_t i = 0; i < start->children().size(); ++i){
         TNpair* r = findPhrase(start->children()[i],find);
         if(r) return r;
