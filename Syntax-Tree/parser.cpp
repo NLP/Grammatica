@@ -93,10 +93,6 @@ STvector Parser::parse(){
 //        cout << _valid[i] << endl;
     }
     removeTrees();
-//    for(std::size_t i = 0; i < _valid.size(); ++i){
-//        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
-//        cout << _valid[i] << endl;
-//    }
     return _valid;
 }
 
