@@ -91,6 +91,8 @@ public:
     SyntaxTree& operator =(const SyntaxTree& S);
     ~SyntaxTree();
 
+    // Public static function
+    static string getSyntaxEncoding(const vector<SyntaxWord>& SWord);
     //These are functions for Parser only
     void assignHeads();
     void assignObjects();
