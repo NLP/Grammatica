@@ -236,11 +236,14 @@ SyntaxObject SyntaxTree::askingFor() const{
         GtSpair iden = (*r->children().begin())->data();
         if(iden._d.first == AUXILARY)
             return AUX;
-        else if(iden._d.first == WHPHRASE &&
-                !getObj(MAINVERB).empty() && getObj(MAINVERB).begin()->getWord().getTokenString().compare("do") == 0)
-            return MAINVERB;
-        else if(iden._d.first == WHPHRASE)
-            return iden._d.second.getSyntax();
+        if(iden._d.first == WHPHRASE){
+            if(!getObj(MAINVERB).empty() && getObj(MAINVERB).begin()->getWord().getTokenString().compare("do") == 0)
+                 return MAINVERB;
+            else if(iden._d.second.getWord().getTokenString() == "when" || iden._d.second.getWord().getTokenString() == "where")
+                 return INDIRECTOBJ;
+            else if(iden._d.first == WHPHRASE)
+                 return iden._d.second.getSyntax();
+        }
         else return S_INVALID;
     }
 }
