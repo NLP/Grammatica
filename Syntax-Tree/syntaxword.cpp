@@ -84,4 +84,5 @@ SyntaxObject SyntaxWord::getSyntax() const{
 SyntaxWord &SyntaxWord::operator =(const SyntaxWord &other) {
     _so = other.getSyntax ();
     _word = other.getWord ();
+    return *this;
 }

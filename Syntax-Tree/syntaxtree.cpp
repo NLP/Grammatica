@@ -116,7 +116,7 @@ TNpair* SyntaxTree::getFirstLeaf(){
  * @return the child
  */
 TNpair *SyntaxTree::getChildAt(size_t i){
-    if(i >= 0 && i < _current->children().size())
+    if(i >= (std::size_t)0 && i < _current->children().size())
         return _current->children()[i];
     else return nullptr;
 }
@@ -398,7 +398,7 @@ void SyntaxTree::setSubj(TNpair *sentence){
     }
     else if(_st == INTERROGATIVE){ //If its a question, then:
         TNpair* r = findPhrase(sentence,NOUNPHRASE);
-        if(hasDef(_root,NOUNPHRASE) == -1){ //If it has no NP, then subj is in the inter phrase
+        if(hasDef(_root,NOUNPHRASE) == (std::size_t)-1){ //If it has no NP, then subj is in the inter phrase
             TNpair* t = findPhrase(sentence,INTPHRASE);
             if(*t->data()._d.second.getWord().getTypes().begin()!= verb)
                 r = t;
@@ -455,8 +455,8 @@ void SyntaxTree::setDO(TNpair *sentence){
     }
     else if(_st == INTERROGATIVE){ //For Qs,
         TNpair* r = findPhrase(sentence,VERBPHRASE);
-        if(hasDef(_root,NOUNPHRASE) != -1 && hasDef(_root,VERBPHRASE) != -1){ //If S nas an NP and VP &
-            if(hasDef(r,NOUNPHRASE) == -1){ //If VP has no NP then DO is in IP
+        if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && hasDef(_root,VERBPHRASE) != (std::size_t)-1){ //If S nas an NP and VP &
+            if(hasDef(r,NOUNPHRASE) == (std::size_t)-1){ //If VP has no NP then DO is in IP
                 TNpair* t = findPhrase(sentence,INTPHRASE);
 //                std::cout << *t << std::endl;
 //                std::cout << *t->data()._d.second.getWord() << endl;
@@ -470,18 +470,18 @@ void SyntaxTree::setDO(TNpair *sentence){
                 r = findPhrase(r,NOUNPHRASE);
             }
         }//If S only has VP then DO is in VP if VP has an NP, otherwise it has none
-        else if(_root->children().size() == 2 &&
-                hasDef(_root,VERBPHRASE) != -1){
+        else if(_root->children().size() == (std::size_t)2 &&
+                hasDef(_root,VERBPHRASE) != (std::size_t)-1){
             r = findPhrase(r,NOUNPHRASE);
         }
-        else if(_root->children().size() == 2 &&
-                hasDef(_root,NOUNPHRASE) != -1){
+        else if(_root->children().size() == (std::size_t)2 &&
+                hasDef(_root,NOUNPHRASE) != (std::size_t)-1){
             return; //If S has only NP, then it has no DO
         }
         else{}
 //        cout << "HELLO" << endl;
         if(!r) return;
-        if(r->data()._d.second.getSyntax() != ST_INVALID) return;
+        if(r->data()._d.second.getSyntax() != S_INVALID) return;
         r->data()._d.second.setSyntax(DIRECTOBJ);
         Word W = r->data()._d.second.getWord();
         recurObj(sentence,W,DIRECTOBJ);
@@ -509,27 +509,27 @@ void SyntaxTree::setIDO(TNpair *sentence){
     }
     else if(_st == INTERROGATIVE){ //For Q,s
         TNpair* r = findPhrase(sentence,VERBPHRASE);
-        if(hasDef(_root,NOUNPHRASE) != -1 && hasDef(_root,VERBPHRASE) != -1){ //If S has VP and NP
-            if(hasDef(r,PREPPHRASE) != -1 && //If VP has a PP AND PP only has a P (ie S ends with a P)
-                    r->children()[hasDef(r,PREPPHRASE)]->children().size() == 1){
+        if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && hasDef(_root,VERBPHRASE) != (std::size_t)-1){ //If S has VP and NP
+            if(hasDef(r,PREPPHRASE) != (std::size_t)-1 && //If VP has a PP AND PP only has a P (ie S ends with a P)
+                    r->children()[hasDef(r,PREPPHRASE)]->children().size() == (std::size_t)1){
                 r = findPhrase(sentence,INTPHRASE); //Then the IDO is in IP
             }
-            else if(hasDef(r,PREPPHRASE) != -1 && //If VP has a PP but PP does not only have a P
-                    r->children()[hasDef(r,PREPPHRASE)]->children().size() != 1){
+            else if(hasDef(r,PREPPHRASE) != (std::size_t)-1 && //If VP has a PP but PP does not only have a P
+                    r->children()[hasDef(r,PREPPHRASE)]->children().size() != (std::size_t)1){
                 r = findPhrase(r,PREPPHRASE);//Then IDO is in PP
                 if(!r) return;
                 r = findPhrase(r,NOUNPHRASE);
             }
-            else if(hasDef(r,PREPPHRASE) == -1){ //IF VP does not have a PP, then there is no IDO
+            else if(hasDef(r,PREPPHRASE) == (std::size_t)-1){ //IF VP does not have a PP, then there is no IDO
                 return;
             }
         }
-        else if(hasDef(_root,VERBPHRASE) != -1 && _root->children().size() == 2){ //IF s has only VP then IDO is in VP if any
+        else if(hasDef(_root,VERBPHRASE) != (std::size_t)-1 && _root->children().size() == (std::size_t)2){ //IF s has only VP then IDO is in VP if any
             r = findPhrase(r,PREPPHRASE);//Then IDO is in PP
             if(!r) return;
             r = findPhrase(r,NOUNPHRASE);
         }
-        else if(hasDef(_root,NOUNPHRASE) != -1 && _root->children().size() == 2){ //If S only has a NP then there is no IDO
+        else if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && _root->children().size() == (std::size_t)2){ //If S only has a NP then there is no IDO
             return;
         }
         else{}
