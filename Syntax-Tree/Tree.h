@@ -103,14 +103,14 @@ struct TreeNode{
      */
     friend std::ostream& operator <<
     (std::ostream& out, const TreeNode<Item>& T)   {
-        out << T.data() << ":{";
+        out << T.data() << ":{ ";
         for(std::size_t i = 0; i < T._child.size(); ++i){
             if(i == T._child.size() - 1)
                 out << *T._child[i];
             else
-                out << *T._child[i] << ", ";
+                out << *T._child[i] << " , ";
         }
-        out << "}";
+        out << " } ";
         return out;
     }
 };

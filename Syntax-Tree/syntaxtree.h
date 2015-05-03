@@ -41,7 +41,7 @@ struct GSContainerpair{
      * @return output stream
      */
     friend std::ostream& operator <<(std::ostream& out, const GSContainerpair& G){
-        out << "(" << phraseLookUp[G._d.first] << "," << G._d.second << ")";
+        out << "( " << phraseLookUp[G._d.first] << " , " << G._d.second << " )";
         return out;
     }
 };

@@ -126,13 +126,10 @@ std::vector<SyntaxWord> Parser::getObj(const SyntaxTree &S, SyntaxObject O){
  * @return True if there is, False otherwise
  */
 bool Parser::findFirstIncomplete(SyntaxTree& S){
-
-    if(S.atLeaf())
-        return false;
+    if(S.atLeaf()) return false;
     for(std::size_t i = 0; i < S.childNum(); ++i){
         S.shiftDown(i);
-        if(findFirstIncomplete(S))
-            return true;
+        if(findFirstIncomplete(S)) return true;
         S.shiftUp();
     }
     return !getNextDef(S.getPhrase(),S.getDef()).empty();
@@ -148,31 +145,6 @@ void Parser::removePartial(SyntaxTree &S){
     bool f = false;
     S = removePartial(S.getCurrent(),c,f);
     S.shiftTo(c);
-//    cout << "Partially Removed: " << S << endl;
-
-//    TNpair* p = S.getParent(S.getCurrent());
-//    cout << "Current: " << *S.getCurrent() << endl;
-//    cout << "Parent of Current: " << *p << endl;
-//    for(std::size_t i = S.childIndex(p,S.getCurrent()) + 1; i < p->children().size(); ++i){
-//        for(std::size_t j = 0; j < p->children()[i]->children().size(); ++j){
-//            cout << "i: " << i << ", j: " << j << endl;
-//            cout << *p->children()[i]->children()[j] << endl;
-////            rt::clear(p->children()[i]->children()[j]);
-//        }
-//    }
-//    cout << "First for done" << endl;
-//    TNpair* q = S.getParent(p);
-////    cout << "Found parent of parent of current: " << *q << endl;
-//    if(!q) cout << "grandparent is null" << endl;
-//    while(q){
-//        cout << "In while" << endl;
-//        for(std::size_t i = S.childIndex(q,p) + 1; i < q->children().size(); ++i){
-//            rt::clear(q->children()[i]);
-//        }
-//        p = q;
-//        q = S.getParent(p);
-//    }
-    //    cout << S << endl;
 }
 
 /**
@@ -387,23 +359,11 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
  * @param S the tree
  */
 void Parser::attachWords(SyntaxTree& S){
-    std::size_t i = 0;
-    TNpair::TNvector L = S.getLeaves(); //NEED LEAVES FUNCTION
-    TNpair::TNvector::iterator it = L.begin();
-    while(it != L.end()){
+    TNpair::TNvector L = S.getLeaves();
+    for(std::size_t i = 0; i < L.size(); ++i){
         Word W = getNextWord(i);
-//        cout << "Word: " << W << endl;
-//        for(std::set<WordType>::iterator it = W.getTypes().begin(); it != W.getTypes().end(); ++it){
-//            std::cout << WordStringMap[*it] << endl;
-//        }
-        removeAllOtherTypes(W,GPtoWT[(*it)->data()._d.first]);
-//        cout << "removed all" << endl;
-//        for(std::set<WordType>::iterator it = W.getTypes().begin(); it != W.getTypes().end(); ++it){
-//            std::cout << WordStringMap[*it] << endl;
-//        }
-        (*it)->data()._d.second.setWord(W);
-        ++it;
-        ++i;
+        removeAllOtherTypes(W,GPtoWT[L[i]->data()._d.first]);
+        L[i]->data()._d.second.setWord(W);
     }
 }
 
@@ -429,7 +389,6 @@ void Parser::assignObjects(SyntaxTree& S){
  */
 void Parser::assignType(SyntaxTree &S){
     S.determineType();
-//    std::cout << "ASSIGNTYPE: " << sentenceLookUp[S.getSentenceType()] << std::endl;
 }
 
 /**
@@ -439,7 +398,6 @@ void Parser::assignType(SyntaxTree &S){
  */
 void Parser::removeAllOtherTypes(Word &W, WordType trueType){
     W = Word(Token(W.getTokenString(),ALPHA),{trueType},W.getDefinitions());
-
 }
 
 /**
@@ -490,37 +448,17 @@ Word Parser::getNextWord(std::size_t i){
  */
 GPlist Parser::getNextDef(GrammarPhrase g, GPlist def){
     std::vector<GPlist> defs = _G.getDefinition(g);
-//    cout << "defs in getNextDef: " << endl;
-//    cout << "defs size " << defs.size() << endl;
-//    cout << "phrase of defs: " << phraseLookUp[g] << endl;
-//    for(std::size_t i = 0; i < defs.size(); ++i){
-//        for(std::size_t j = 0; j < defs[i].size(); ++j){
-//            cout << i << "," << j << ":" <<  defs[i][j] << "|";
-//        }cout << endl;
-//    }cout << endl;
-//    cout << "defs[0] " << endl;
-//    for(std::size_t i = 0; i < defs[0].size(); ++i){
-//        cout << defs[0][i] << "|";
-//    }cout << endl;
-//    cout << "checking if empty" << endl;
     if(def.empty()){
-//        cout << "def is empty" << endl;
-        if(defs.empty()){
-            return GPlist();
-        }
+        if(defs.empty()) return GPlist();
         return defs[0];
     }
-//    cout << "def is not empty" << endl;
     for(std::size_t i = 0; i < defs.size(); ++i){
         if(defs[i] == def){
-            if(i == defs.size() - 1){
-                return GPlist();
-            }
+            if(i == defs.size() - 1) return GPlist();
             return defs[++i];
         }
     }
     return GPlist();
-
 }
 
 /**
@@ -531,14 +469,12 @@ GPlist Parser::getNextDef(GrammarPhrase g, GPlist def){
  */
 WordType Parser::getNextType(const Word& W, WordType T){
     WTset wt = W.getTypes();
-    if(T == IGNORETHIS)
-        return *wt.begin();
+    if(T == IGNORETHIS) return *wt.begin();
     WTset::iterator it = wt.begin();
     while(it != wt.end()){
         if(*it == T){
             ++it;
-            if(it == wt.end())
-                return IGNORETHIS;
+            if(it == wt.end()) return IGNORETHIS;
             return *it;
         }
         ++it;

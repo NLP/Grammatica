@@ -142,29 +142,17 @@ bool SyntaxTree::atFirstLeaf(){
  * @return the number of leaves before current
  */
 std::size_t SyntaxTree::leavesBefore(){
-    using namespace std;
-//    cout << "In leavesbefore" << endl;
     TNpair* head = rt::parent(_root,_current);
-//    if(head) cout << "Head: " << *head << endl;
-//    else cout << "Head: EMPTY" << endl;
     std::size_t sum = 0;
     while(head){
-//        cout << "In while" << endl;
         for(std::size_t i = 0; i < head->children().size(); ++i){
-//            cout << "i: " << i << endl;
-            if(head->children()[i] == _current){
-//                cout << "in for if" << endl;
+            if(head->children()[i] == _current)
                 break;
-            }
-//            cout << "head->children()[i] != _current" << endl;
             sum += rt::leaves(head->children()[i]);
-//            cout << "new sum: " << sum << endl;
         }
         head = rt::parent(_root,head);
-//        cout << "got new head" << endl;
         if(head == Tpair::_root) break;
     }
-//    cout << "Done/ sum: " << sum << endl;
     return sum;
 }
 
@@ -189,10 +177,8 @@ size_t SyntaxTree::childIndex(TNpair* parent,TNpair *child){
 std::vector<SyntaxWord> SyntaxTree::getAll() const{
     std::vector<SyntaxWord> All;
     std::vector<TNpair*> L = rt::allLeaves(_root);
-    for(std::size_t i = 0; i < L.size(); ++i){
-//        std::cout << "ingetAll: " << L[i]->data()._d.second << endl;
+    for(std::size_t i = 0; i < L.size(); ++i)
         All.insert(All.end(),L[i]->data()._d.second);
-    }
     return All;
 }
 
@@ -205,9 +191,8 @@ std::vector<SyntaxWord> SyntaxTree::getObj(SyntaxObject S) const{
     std::vector<SyntaxWord> Obj;
     std::vector<TNpair*> L = rt::allLeaves(_root);
     for(std::size_t i = 0; i < L.size(); ++i){
-        if(L[i]->data()._d.second.getSyntax() == S){
+        if(L[i]->data()._d.second.getSyntax() == S)
             Obj.insert(Obj.end(),L[i]->data()._d.second);
-        }
     }
     return Obj;
 }
@@ -247,6 +232,7 @@ SyntaxObject SyntaxTree::askingFor(){
 void SyntaxTree::assignHeads(){
     recurHead(_root);
 }
+
 /**
  * @brief SyntaxTree::assignObjects assigns the syntax to each node
  */
@@ -254,7 +240,6 @@ void SyntaxTree::assignObjects(){
     setSubj(Tpair::_root);
     setMV(Tpair::_root);
     setDO(Tpair::_root);
-//    cout << *_root << endl;
     setIDO(Tpair::_root);
 //    setAux(Tpair::_root);
 //    setQ(Tpair::_root);
@@ -273,7 +258,6 @@ void SyntaxTree::determineType(){
         _st = DECLARATIVE;
     else
         _st = ST_INVALID;
-
 }
 
 /**
@@ -287,8 +271,6 @@ void SyntaxTree::recurHead(TNpair* root){
     for(std::size_t i = 0; i < root->children().size(); ++i)
         recurHead(root->children()[i]);
     Word W = getHeadWord(root->data()._d.first,root->children());
-//    cout << "The Word: " << W.getTokenString() << endl;
-    //Once it analyzes each of its children, find out which head word is for this node
     root->data()._d.second.setWord(W);
 }
 
@@ -300,26 +282,11 @@ void SyntaxTree::recurHead(TNpair* root){
  * NOTE: The objects must have already been found. This just assigns the other nodes
  */
 void SyntaxTree::recurObj(TNpair* root, const Word& W, SyntaxObject S){
-    //Assumed to be a normal declarative
-    //Add cases later for different types of sentences, ie more complex ones
-    //like questions and commands
-
-    //The head word of a declarative is the main verb
     if(!root) return;
     for(std::size_t i = 0; i < root->children().size(); ++i)
         recurObj(root->children()[i],W,S);
     if(root->data()._d.second.getWord().getTokenString() == W.getTokenString())
         root->data()._d.second.setSyntax(S);
-
-    //determine sentence struct
-    //if declarative
-    //subj is the head noun of the noun phrase before the main verb
-    //the mainverb is the head verb of the sentence
-    //the do(if any) is the head noun of the noun phrase that comes directly after the main verb
-    //the ido is the head noun of the prep phrase
-    //HOWEVER, the do and ido can be swapped
-    //Ex: John gives the ball to him & John gives him the ball
-
 }
 
 /**
@@ -329,23 +296,17 @@ void SyntaxTree::recurObj(TNpair* root, const Word& W, SyntaxObject S){
  * @return the head word
  */
 Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
-    if(W.size() == 1){
-//        std::cout << "For: " << phraseLookUp[g] << std::endl;
-//        std::cout << "The Word: " << (*W.begin())->data()._d.second.getWord() << std::endl;
-//        std::cout << "Word Type Size: " << (*W.begin())->data()._d.second.getWord().getTypes().size() << std::endl;
+    if(W.size() == 1)
         return (*W.begin())->data()._d.second.getWord();
-    }
     switch(g){
         case NOUNPHRASE:{
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == noun && W[i]->data()._d.first == NOUN){
+                if(wt == noun && W[i]->data()._d.first == NOUN)
                     return W[i]->data()._d.second.getWord();
-                }
-                if(wt == noun && W[i]->data()._d.first == NOUNPHRASE){
+                if(wt == noun && W[i]->data()._d.first == NOUNPHRASE)
                     hold = W[i]->data()._d.second.getWord();
-                }
             }
             return hold;
             break;
@@ -355,12 +316,10 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == verb && W[i]->data()._d.first == VERB){
+                if(wt == verb && W[i]->data()._d.first == VERB)
                     return W[i]->data()._d.second.getWord();
-                }
-                if(wt == verb && W[i]->data()._d.first == VERBPHRASE){
+                if(wt == verb && W[i]->data()._d.first == VERBPHRASE)
                     hold = W[i]->data()._d.second.getWord();
-                }
             }
             return hold;
             break;
@@ -369,12 +328,10 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == preposition && W[i]->data()._d.first == PREP){ //NEEDS WordType Prep
+                if(wt == preposition && W[i]->data()._d.first == PREP) //NEEDS WordType Prep
                     return W[i]->data()._d.second.getWord();
-                }
-                if(wt == preposition && W[i]->data()._d.first == PREPPHRASE){
+                if(wt == preposition && W[i]->data()._d.first == PREPPHRASE)
                     hold = W[i]->data()._d.second.getWord();
-                }
             }
             return hold;
             break;
@@ -382,20 +339,11 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
         case INTPHRASE:{
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
-//                                    cout << "W: " << W[i]->data()._d.second.getWord() << endl;
-//                for(std::set<WordType>::iterator it = W[i]->data()._d.second.getWord().getTypes().begin(); it != W[i]->data()._d.second.getWord().getTypes().end(); ++it){
-//                    std::cout << WordStringMap[*it] << endl;
-//                }
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-//                cout << WordStringMap[wt] << endl;
-                if(wt == question && W[i]->data()._d.first == WHPHRASE){ //NEEDS WordType WH
-//                    cout << "Is q. and is WH" << endl;
-
+                if(wt == question && W[i]->data()._d.first == WHPHRASE) //NEEDS WordType WH
                     return W[i]->data()._d.second.getWord();
-                }
-                if(wt == verb && W[i]->data()._d.first == AUXILARY){
+                if(wt == verb && W[i]->data()._d.first == AUXILARY)
                     hold = W[i]->data()._d.second.getWord();
-                }
             }
             return hold;
             break;
@@ -404,32 +352,14 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == question && W[i]->data()._d.first == WHWORD){ //NEEDS WordType WH
+                if(wt == question && W[i]->data()._d.first == WHWORD) //NEEDS WordType WH
                     return W[i]->data()._d.second.getWord();
-                }
-                if(wt == question && W[i]->data()._d.first == WHWORD){
+                if(wt == question && W[i]->data()._d.first == WHWORD)
                     hold = W[i]->data()._d.second.getWord();
-                }
             }
             return hold;
             break;
         }
-//        case AUXILARY:{
-//            Word hold;
-//            for(std::size_t i = 0; i < W.size(); ++i){
-//                WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-//                if(wt == preposition && W[i]->data()._d.first == PREP){ //NEEDS WordType Prep
-//                    return W[i]->data()._d.second.getWord();
-//                }
-//                if(wt == preposition && W[i]->data()._d.first == PREPPHRASE){
-//                    hold = W[i]->data()._d.second.getWord();
-//                }
-//            }
-//            return hold;
-//            break;
-//        }
-
-
         default:{
 
             break;
@@ -486,7 +416,6 @@ void SyntaxTree::setSubj(TNpair *sentence){
     }
     else if(_st == IMPERATIVE){} //commands have no subject
     else{}
-
 }
 
 /**
@@ -557,11 +486,9 @@ void SyntaxTree::setDO(TNpair *sentence){
         Word W = r->data()._d.second.getWord();
         recurObj(sentence,W,DIRECTOBJ);
     }else if(_st == IMPERATIVE){
-
+        //Not yet supported
     }
     else{}
-
-
 }
 
 /**
@@ -612,10 +539,9 @@ void SyntaxTree::setIDO(TNpair *sentence){
         Word W = r->data()._d.second.getWord();
         recurObj(sentence,W,INDIRECTOBJ);
     }else if(_st == IMPERATIVE){
-
+        //Not yet supported
     }
     else{}
-
 }
 
 /**
@@ -651,9 +577,8 @@ void SyntaxTree::setAux(TNpair *sentence){
  * @return True if found, False otherwise
  */
 std::size_t SyntaxTree::hasDef(TNpair *phrase, GrammarPhrase g){
-    for(std::size_t i = 0; i < phrase->children().size(); ++i){
+    for(std::size_t i = 0; i < phrase->children().size(); ++i)
         if(phrase->children()[i]->data()._d.first == g) return i;
-    }
     return -1;
 }
 
