@@ -228,7 +228,7 @@ SentenceType SyntaxTree::getSentenceType() const{
  * @brief SyntaxTree::askingFor Gets the syntaxobject the question is asking for, if it is a question
  * @return syntax object
  */
-SyntaxObject SyntaxTree::askingFor(){
+SyntaxObject SyntaxTree::askingFor() const{
     if(_st != INTERROGATIVE) return S_NONE;
     else{
         TNpair* r = findPhrase(_root,INTPHRASE);
