@@ -76,6 +76,12 @@ SyntaxObject SyntaxWord::getSyntax() const{
     return _so;
 }
 
+/// similar to getSyntax, but return the mapped string to SyntaxObject
+string SyntaxWord::getSyntaxEncoding() const
+{
+    return syntaxStrEncoding[_so];
+}
+
 /**
  * @brief SyntaxWord::operator =
  * @param other

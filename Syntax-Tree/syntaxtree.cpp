@@ -45,6 +45,25 @@ SyntaxTree::~SyntaxTree(){
 }
 
 /**
+ * @brief SyntaxTree::getSyntaxEncoding
+ * 		External function that should be part of SyntaxTree,
+ * 		function does not use any of member variales
+ * @param SWord
+ * @return
+ */
+string SyntaxTree::getSyntaxEncoding(const vector<SyntaxWord> &SWord)
+{
+    string encoding;
+    for(SyntaxWord const& sw : SWord)
+    {
+        encoding += sw.getSyntaxEncoding ();
+        encoding += "-";
+    }
+    if(!encoding.empty ()) return encoding.substr (0, encoding.size () - 1);
+    else	return encoding;
+}
+
+/**
  * @brief SyntaxTree::addDef Adds the Definition to the current node (the children)
  * @param def the definition (children)
  */
