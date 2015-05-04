@@ -264,13 +264,6 @@ void SyntaxTree::assignObjects(){
     setDO(Tpair::_root);
     setIDO(Tpair::_root);
     setAtt(Tpair::_root);
-//    cout << *this << endl;
-//    std::string s = getObj(MAINVERB).begin()->getWord().getTokenString();
-//    if(s == "is" || s == "are")
-//        swapSyntax(*getObj(SUBJECT).begin(),*getObj(DIRECTOBJ).begin());
-//    cout << *this << endl;
-//    setAux(Tpair::_root);
-//    setQ(Tpair::_root);
 }
 
 /**
@@ -393,27 +386,19 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             break;
         }
         case WHPHRASE:{
-//            Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
                 if(wt == question && W[i]->data()._d.first == WHWORD) //NEEDS WordType WH
                     return W[i]->data()._d.second.getWord();
-//                if(wt == question && W[i]->data()._d.first == WHWORD)
-//                    hold = W[i]->data()._d.second.getWord();
             }
-//            return hold;
             break;
         }
         case ADJPHRASE:{
-//            Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
                 WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
                 if(wt == adjective && W[i]->data()._d.first == ADJECTIVE) //NEEDS WordType WH
                     return W[i]->data()._d.second.getWord();
-//                if(wt == question && W[i]->data()._d.first == WHWORD)
-//                    hold = W[i]->data()._d.second.getWord();
             }
-//            return hold;
             break;
         }
         default:{
@@ -457,7 +442,6 @@ void SyntaxTree::setSubj(TNpair *sentence){
         if(hasDef(_root,NOUNPHRASE) == (std::size_t)-1 &&
                 (hasDef(_root,VERBPHRASE) != (std::size_t)-1 &&
                  hasDef(findPhrase(_root,VERBPHRASE),NOUNPHRASE) == (std::size_t)-1)){ //If it has no NP, then subj is in the inter phrase
-//            std::cout << "In no NP" << std::endl;
             TNpair* t = findPhrase(sentence,INTPHRASE);
             if(*t->data()._d.second.getWord().getTypes().begin()!= verb
                     && askingFor() != MAINVERB)
@@ -500,13 +484,11 @@ void SyntaxTree::setMV(TNpair *sentence){
             r->data()._d.second.setSyntax(MAINVERB);
             recurObj(sentence,r->data()._d.second.getWord(),MAINVERB);
         }
-
     }
     else{
         sentence->data()._d.second.setSyntax(MAINVERB); //MV is always the HW of the sentence
         recurObj(sentence,sentence->data()._d.second.getWord(),MAINVERB);
     }
-
 }
 
 /**
@@ -524,7 +506,6 @@ void SyntaxTree::setDO(TNpair *sentence){
         recurObj(sentence,W,DIRECTOBJ);
     }
     else if(_st == INTERROGATIVE){ //For Qs,
-
         TNpair* r = findPhrase(sentence,VERBPHRASE);
         if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && hasDef(_root,VERBPHRASE) != (std::size_t)-1){ //If S nas an NP and VP &
             if(hasDef(r,NOUNPHRASE) == (std::size_t)-1){ //If VP has no NP then DO is in IP
@@ -540,35 +521,25 @@ void SyntaxTree::setDO(TNpair *sentence){
                     if(t->data()._d.second.getWord().getTokenString() == "where" ||
                             t->data()._d.second.getWord().getTokenString() == "when")
                         return;
-//                    std::cout << "In first if" << endl;
-    //                std::cout << *t << std::endl;
-    //                std::cout << *t->data()._d.second.getWord() << endl;
-    //                std::cout << WordStringMap[*t->data()._d.second.getWord().getTypes().begin()] << std::endl;
-    //                cout << phraseLookUp[getLastLeaf()->data()._d.first] << endl;
                     if(getLastLeaf()->data()._d.first == PREP)return; //If the last word is a prep, then if there is NO NP in the VP then there is no DO as the Wh in the IP refers to the IDO
                     if(*t->data()._d.second.getWord().getTypes().begin() == question
                             && askingFor() != MAINVERB)
                         r = t;
                 }
-
             }
-            else{//For the VP that has NP, the DO is in NP
-//                std::cout << "In first else" << endl;
-                r = findPhrase(r,NOUNPHRASE);
-            }
+            else//For the VP that has NP, the DO is in NP
+               r = findPhrase(r,NOUNPHRASE);
         }//If S only has VP then DO is in VP if VP has an NP, otherwise it has none
         else if(_root->children().size() == (std::size_t)2 &&
                 hasDef(_root,VERBPHRASE) != (std::size_t)-1){
-//            std::cout << "In 2 if" << endl;
             r = findPhrase(r,NOUNPHRASE);
         }
         else if(_root->children().size() == (std::size_t)2 &&
                 hasDef(_root,NOUNPHRASE) != (std::size_t)-1){
-//            std::cout << "In 3 if" << endl;
             return; //If S has only NP, then it has no DO
         }
         else{}
-//        cout << "HELLO" << endl;
+
         if(!r) return;
         if(r->data()._d.second.getSyntax() != S_INVALID) return;
         r->data()._d.second.setSyntax(DIRECTOBJ);
@@ -607,22 +578,17 @@ void SyntaxTree::setIDO(TNpair *sentence){
                     Word W = w->data()._d.second.getWord();
                     recurObj(sentence,W,INDIRECTOBJ);
                 }
-
             }
         }
         TNpair* r = findPhrase(sentence,VERBPHRASE);
         if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && hasDef(_root,VERBPHRASE) != (std::size_t)-1){ //If S has VP and NP
-//            std::cout << "In 1 if" << endl;
-
             if(hasDef(r,PREPPHRASE) != (std::size_t)-1 && //If VP has a PP AND PP only has a P (ie S ends with a P)
                     r->children()[hasDef(r,PREPPHRASE)]->children().size() == (std::size_t)1){
-//                std::cout << "In 1 if" << endl;
                 r = findPhrase(sentence,INTPHRASE); //Then the IDO is in IP
                 if(askingFor() == MAINVERB) return;
             }
             else if(hasDef(r,PREPPHRASE) != (std::size_t)-1 && //If VP has a PP but PP does not only have a P
                     r->children()[hasDef(r,PREPPHRASE)]->children().size() != (std::size_t)1){
-//               std::cout << "In 2 if" << endl;
                 if(askingFor() != MAINVERB){
                     r = findPhrase(r,PREPPHRASE);//Then IDO is in PP
                     if(!r) return;
@@ -630,21 +596,16 @@ void SyntaxTree::setIDO(TNpair *sentence){
                 }
                 else return;
             }
-            else if(hasDef(r,PREPPHRASE) == (std::size_t)-1){ //IF VP does not have a PP, then there is no IDO
-//                std::cout << "In 3 if" << endl;
+            else if(hasDef(r,PREPPHRASE) == (std::size_t)-1) //IF VP does not have a PP, then there is no IDO
                 return;
-            }
         }
         else if(hasDef(_root,VERBPHRASE) != (std::size_t)-1 && _root->children().size() == (std::size_t)2){ //IF s has only VP then IDO is in VP if any
-//            std::cout << "In 2 if" << endl;
             r = findPhrase(r,PREPPHRASE);//Then IDO is in PP
             if(!r) return;
             r = findPhrase(r,NOUNPHRASE);
         }
-        else if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && _root->children().size() == (std::size_t)2){ //If S only has a NP then there is no IDO
-
+        else if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && _root->children().size() == (std::size_t)2) //If S only has a NP then there is no IDO
             return;
-        }
         else{}
 
         if(!r) return;
@@ -694,12 +655,9 @@ void SyntaxTree::setAtt(TNpair *sentence)
     }
     else if(_st == IMPERATIVE){}
     else{}
-
     if(!r) return;
-//        cout << "HELFEL" << endl;
     r = findPhrase(r,ADJPHRASE);
     if(!r) return;
-//        cout << "{efaef" << endl;
     r->data()._d.second.setSyntax(ATTRIBUTE);
     Word W = r->data()._d.second.getWord();
     recurObj(sentence,W,ATTRIBUTE);

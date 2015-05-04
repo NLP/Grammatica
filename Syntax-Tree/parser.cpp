@@ -65,38 +65,19 @@ STvector Parser::parse(){
     SyntaxTree S(new TNpair(GtSpair(SENTENCE,SyntaxWord()))); //At the beginning, CURRENT is at the true root
     std::size_t cutoff = 0;
     while(recDescent(S,cutoff)){ //RecDescends based on the CURRENT pointer in the tree
-//        cout << "WE HAVE A TREE" << endl;
         _valid.insert(_valid.end(),S);
-//        std::cout << S << std::endl;
-//        cin.get();
-//        cout << "finding first incomplete of S" << endl;
-        if(!findFirstIncomplete(S)){ //Sets the CURRENT to the first slowest subtree that has more defs to explore
+        if(!findFirstIncomplete(S)) //Sets the CURRENT to the first slowest subtree that has more defs to explore
             break; //If it cannot find any more subtrees with more defs to explore, then stop
-        }
-//        cout << "Found it and moved current" << endl;
-//        cout << *S.getCurrent() << endl;
-//        cout << S.leavesBefore() << endl;
         cutoff = S.leavesBefore();
-//        cout << "Found new cutoff: " << cutoff << endl;
         removePartial(S);
-//        cout << "removed partial" << endl;
     } //As long as recdescent is able to continue making trees
-//    std::cout << "After while" << std::endl;
-//    using namespace std;
     for(std::size_t i = 0; i < _valid.size(); ++i){
         _valid[i].shiftToRoot();
-//        cout << "1" << endl;
         assignType(_valid[i]);
-//        cout << "2" << endl;
         attachWords(_valid[i]);
-//        cout << "3" << endl;
         assignHeadWords(_valid[i]);
-//        cout << "4(/' _ ')/ ^ /(. o .)|" << endl;
         assignObjects(_valid[i]);
-//        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
-//        cout << _valid[i] << endl;
     }
-//    cout << "out "<< endl;
     removeTrees();
     return _valid;
 }
@@ -155,42 +136,14 @@ void Parser::removePartial(SyntaxTree &S){
  * @return the new tree
  */
 TNpair* Parser::removePartial(TNpair *root, TNpair *target, bool& found){
-//    using namespace std;
-//    cout << "in remove Partial" << endl;
-//    cout << "Root: " << *root << endl;
-//    cout << "Target: " << *target << endl;
-//    cout << "found: " << found << endl;
-//    if(target == root){
-//        for(std::size_t i = 0; i < root->children().size(); ++i){
-//            child.insert(child.end(),removePartial(root->children()[i],target,found));
-//        }
-//        found = true;
-//        return new TNpair(root->data(),child);
-//    }
     TNpair::TNvector child;
     for(std::size_t i = 0; i < root->children().size(); ++i){
-//        cout << "Child: " << i << endl;
-//        child.insert(child.end(),removePartial(root->children()[i],target,found));
-//        if(target == root->children()[i]){
-//            cout << "found the target" << endl;
-//            child.insert(child.end(),removePartial(root->children()[i],target,found));
-//            cout << "all children of target done" << endl;
-//            found = true;
-//            break;
-//        }
-        if(!found){
-//            cout << "found false" << endl;
+        if(!found)
             child.insert(child.end(),removePartial(root->children()[i],target,found));
-//            cout << "Added the child of " << i << endl;
-        }
-        else{
-//            cout << "found true" << endl;
+        else
             child.insert(child.end(),new TNpair(root->children()[i]->data()));
-//            cout << "Added just the data of " << i << endl;
-        }
     }
     if(target == root) found = true;
-//    cout << "Returning a copy of itself " << endl;
     return new TNpair(root->data(),child);
 }
 
@@ -203,27 +156,12 @@ TNpair* Parser::removePartial(TNpair *root, TNpair *target, bool& found){
  */
 bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //    cin.get();
-//    cout << "in RecDescent" << endl;
-//    if(S.getPhrase() == SENTENCE)
-//        c = 0;
-//    cout << "EHFIE" << endl;
 //    cout << "S so far: " << S << endl << endl;
 //    cout << "c = " << c << endl;
-//    if(c == _words.size()){
-//        --c;
-//        return false;
-//    }
 //    cout << "Scur: " << *S.getCurrent() << endl;
-//    cout << "init def is " << (S.getDef().empty() ? "EMPTY":"NOT EMPTY") << endl;
 //    cout << "The phrase is " << phraseLookUp[S.getPhrase()] << endl;
-//    if(S.leafNum() > _words.size()) return false;
     GPlist def = getNextDef(S.getPhrase(),S.getDef());
-//    cout << "Def: ";
-//    for(std::size_t i = 0; i < def.size(); ++i){
-//        cout << def[i] << "|";
-//    }cout << endl;
     if(def.empty() && S.getDef().empty()){
-//        cout << "Def is empty OR root is leaf" << endl;
         Word W;
         if(S.atLastLeaf()){
 //            cout << "S is at the last leaf" << endl;
@@ -233,11 +171,9 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //                --c;
                 return false;
             }
-//            cout << "at the last word" << endl;
             W = getNextWord(c);
         }
-        else
-            W = getNextWord(c);
+        else W = getNextWord(c);
 //        cout << "Got the next word: " << W << endl;
         for(WordType cT = getNextType(W,IGNORETHIS); cT != IGNORETHIS; cT = getNextType(W,cT)){
             GrammarPhrase g = WTtoGP[cT];
@@ -251,112 +187,59 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
         }
         return false;
     }
-    if(!S.getDef().empty()){
-        S.removeDef();
-    }
-//    cout << "Def is not leaf" << endl;
-    while(!def.empty()){
-//        cout << "def is still avail" << endl;
-        if(S.getDef().empty()) S.addDef(def);
+    if(!S.getDef().empty()) S.removeDef();
 
-//        cout << "Added def" << endl;
+    while(!def.empty()){
+        if(S.getDef().empty()) S.addDef(def);
 //        cout << "S with added def: " << S << endl;
         bool check = false;
-//        cout << "Going into each child" << endl;
         for(std::size_t i = 0; i < S.childNum(); ++i){
 //            cout << "i: " << i << endl;
             S.shiftDown(i);
 //            cout << "The CHild: " << *S.getCurrent() << endl;
-//            cout << "shifted down to i" << endl;
-//            cout << *S.getCurrent() << endl;
             check = recDescent(S,c);
-//            cout << "Popped out of recur/*s*/ion" << endl;
-//            cin.get();
             if(!check && i != 0){
                 S.shiftUp();
-//                cout << "recur returned false" << endl;
 //                cout << "Not first child" << endl;
-//                c -= i;
 //                cout << "Now C: " << c << endl;
-//                 --c;
-//                cout << "C after first check: " << c << endl;
-
 //                cout << "i here: " << i << endl;
                 if(S.getChildAt(i-1) && !S.getChildAt(i-1)->isLeaf()){
                     c -= rt::leaves(S.getChildAt(i-1));
                     i -= 2;
-//                    S.shiftDown();
-//                    break; //Why did I remove this again?
                 }
                 else{
                     while(i > 0 && S.getChildAt(i-1) && S.getChildAt(i-1)->isLeaf()){
-    //                    cout << "In while" << endl;
-    //                    cout << "i: " << i << endl;
-    //                    cout << "c: " << c << endl;
                         --c;
                         --i;
                     }
-//                    if(S.getChildAt(i)->isLeaf()){
-//                        --c;
-//                        --i;
-//                    }
                     if(i == 0){
-
                         S.removeDef();
                         break;
                     }
                 }
-
-//                --i;
 //                cout << "C: " << c << endl;
 //                cout << "I: " << i << endl;
-
                 S.shiftDown(i); //Previously 0
-//                --i;
-
-//                i -= 2;
             }
             else if(!check && i == 0){
-//                cout << "recur returned false" << endl;
 //                cout << "First child" << endl;
-
-                //Got to its previous child
-                //Recur that child again
-//                c -= rt::leaves(S.getCurrent());
                 S.shiftUp();
                 S.removeDef();
                 break;
-//                if(S.getPhrase() == SENTENCE) c = 0;
-//                if(i == 0)
-
-//                else --i;
-//                if(i != 0) --i;
-
-
-//                cout << "removing children and STOP" << endl;
-//                break;
             }
             if(!S.getParent(S.getCurrent())){
 //                cout <<"For some reason it is already all the way at root" << endl;
                 if(check && S.leafNum() == _words.size()) return true;
             }
             S.shiftUp();
-//            cout << "shifted back up" << endl;
-//            cout << *S.getCurrent() << endl;
         }
         if(check){
 //            cout << "recur returned true for all children" << endl;
             return true;
         }
         def = getNextDef(S.getPhrase(),def);
-//        if(S.getCurrent()->data()._d.first == SENTENCE)c = 0;
-//        cout << "Got next def: ";
-//        for(std::size_t i = 0; i < def.size(); ++i){
-//            cout << def[i] << "|";
-//        }cout << endl;
     }
 //    cout << "No more defs for this phrase and no successful recur, returning false" << endl;
-
     return false;
 }
 
