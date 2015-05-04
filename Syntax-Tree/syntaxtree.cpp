@@ -524,6 +524,7 @@ void SyntaxTree::setDO(TNpair *sentence){
         recurObj(sentence,W,DIRECTOBJ);
     }
     else if(_st == INTERROGATIVE){ //For Qs,
+
         TNpair* r = findPhrase(sentence,VERBPHRASE);
         if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && hasDef(_root,VERBPHRASE) != (std::size_t)-1){ //If S nas an NP and VP &
             if(hasDef(r,NOUNPHRASE) == (std::size_t)-1){ //If VP has no NP then DO is in IP
@@ -536,6 +537,9 @@ void SyntaxTree::setDO(TNpair *sentence){
                 }
                 else{
                     TNpair* t = findPhrase(sentence,INTPHRASE);
+                    if(t->data()._d.second.getWord().getTokenString() == "where" ||
+                            t->data()._d.second.getWord().getTokenString() == "when")
+                        return;
 //                    std::cout << "In first if" << endl;
     //                std::cout << *t << std::endl;
     //                std::cout << *t->data()._d.second.getWord() << endl;
@@ -593,6 +597,19 @@ void SyntaxTree::setIDO(TNpair *sentence){
         recurObj(sentence,W,INDIRECTOBJ);
     }
     else if(_st == INTERROGATIVE){ //For Q,s
+        TNpair* w = findPhrase(sentence,INTPHRASE);
+        if(w){
+            w = findPhrase(w,WHPHRASE);
+            if(w){
+                if(w->data()._d.second.getWord().getTokenString() == "where" ||
+                        w->data()._d.second.getWord().getTokenString() == "where"){
+                    w->data()._d.second.setSyntax(INDIRECTOBJ);
+                    Word W = w->data()._d.second.getWord();
+                    recurObj(sentence,W,INDIRECTOBJ);
+                }
+
+            }
+        }
         TNpair* r = findPhrase(sentence,VERBPHRASE);
         if(hasDef(_root,NOUNPHRASE) != (std::size_t)-1 && hasDef(_root,VERBPHRASE) != (std::size_t)-1){ //If S has VP and NP
 //            std::cout << "In 1 if" << endl;
