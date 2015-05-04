@@ -263,7 +263,7 @@ void SyntaxTree::assignObjects(){
     setSubj(Tpair::_root);
     setDO(Tpair::_root);
     setIDO(Tpair::_root);
-    setAtt(Tpair::_root);
+//    setAtt(Tpair::_root);
 }
 
 /**
@@ -332,23 +332,26 @@ Word SyntaxTree::getHeadWord(GrammarPhrase g, TNpair::TNvector W){
             return hold;
             break;
         }
-        case SENTENCE:{
-            Word hold;
-            Word aux;
-            for(std::size_t i = 0; i < W.size(); ++i){
-                WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
-                if(wt == verb && W[i]->data()._d.first == VERB)
-                    return W[i]->data()._d.second.getWord();
-                if(wt == verb && W[i]->data()._d.first == VERBPHRASE)
-                    hold = W[i]->data()._d.second.getWord();
-                if(wt == auxiliary && W[i]->data()._d.first == AUXILARY)
-                    aux = W[i]->data()._d.second.getWord();
-            }
-            if(*hold.getTypes().begin() == IGNORETHIS && hold.getTypes().size() == (std::size_t)1)
-                return aux;
-            return hold;
-            break;
-        }
+//        case SENTENCE:{
+//            Word hold;
+//            Word aux;
+//            for(std::size_t i = 0; i < W.size(); ++i){
+//                WordType wt = *W[i]->data()._d.second.getWord().getTypes().begin(); //There should ONLY be one type at this moment
+//                cout << W[i]->data()._d.second.getWord().getTokenString() << endl;
+//                if(wt == verb && W[i]->data()._d.first == VERB)
+//                    return W[i]->data()._d.second.getWord();
+//                if(wt == verb && W[i]->data()._d.first == VERBPHRASE)
+//                    hold = W[i]->data()._d.second.getWord();
+//                if(wt == auxiliary && W[i]->data()._d.first == AUXILARY)
+//                    aux = W[i]->data()._d.second.getWord();
+//            }
+//            cout << "Aux: " << aux.getTokenString() << endl;
+//            if(*hold.getTypes().begin() == IGNORETHIS && hold.getTypes().size() == (std::size_t)1)
+//                return aux;
+//            return hold;
+//            break;
+//        }
+        case SENTENCE:
         case VERBPHRASE:{
             Word hold;
             for(std::size_t i = 0; i < W.size(); ++i){
@@ -470,22 +473,16 @@ void SyntaxTree::setSubj(TNpair *sentence){
 void SyntaxTree::setMV(TNpair *sentence){
     TNpair* r = findPhrase(sentence,VERBPHRASE);
     if(!r){ //If there is no verb phrase, then the auxilary is the main verb
-        r = findPhrase(sentence,VERB);
-        if(!r){
-            r = findPhrase(sentence,INTPHRASE);
-            if(!r) return;
-            r = findPhrase(r,AUXILARY);
-            if(!r) //If there is no auxilary, then there is no other verb SORRY
-                return;
-            r->data()._d.second.setSyntax(MAINVERB);
-            recurObj(sentence,r->data()._d.second.getWord(),MAINVERB);
-        }
-        else{
-            r->data()._d.second.setSyntax(MAINVERB);
-            recurObj(sentence,r->data()._d.second.getWord(),MAINVERB);
-        }
+        r = findPhrase(sentence,INTPHRASE);
+        if(!r) return;
+        r = findPhrase(r,AUXILARY);
+        if(!r) //If there is no auxilary, then there is no other verb SORRY
+            return;
+        r->data()._d.second.setSyntax(MAINVERB);
+        recurObj(sentence,r->data()._d.second.getWord(),MAINVERB);
     }
     else{
+
         sentence->data()._d.second.setSyntax(MAINVERB); //MV is always the HW of the sentence
         recurObj(sentence,sentence->data()._d.second.getWord(),MAINVERB);
     }
