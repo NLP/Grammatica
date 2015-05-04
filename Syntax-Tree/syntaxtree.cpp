@@ -264,6 +264,10 @@ void SyntaxTree::assignObjects(){
     setDO(Tpair::_root);
     setIDO(Tpair::_root);
 //    setAtt(Tpair::_root);
+//    std::string s = Tpair::_root->data()._d.second.getWord().getTokenString();
+//    if(s.compare("is") == 0 || s.compare("are") == 0 || s.compare("am") == 0){
+//        swapSyntax(getObj())
+//    }
 }
 
 /**
