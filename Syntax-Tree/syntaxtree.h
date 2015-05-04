@@ -84,6 +84,8 @@ private:
     void setAux(TNpair* sentence);
     size_t hasDef(TNpair *phrase, GrammarPhrase g);
 
+    void swapSyntax(SyntaxWord& A, SyntaxWord& B);
+
 public:
     SyntaxTree();
     SyntaxTree(TNpair* root);

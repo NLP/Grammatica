@@ -85,13 +85,18 @@ STvector Parser::parse(){
 //    using namespace std;
     for(std::size_t i = 0; i < _valid.size(); ++i){
         _valid[i].shiftToRoot();
+//        cout << "1" << endl;
         assignType(_valid[i]);
+//        cout << "2" << endl;
         attachWords(_valid[i]);
+//        cout << "3" << endl;
         assignHeadWords(_valid[i]);
+//        cout << "4(/' _ ')/ ^ /(. o .)|" << endl;
         assignObjects(_valid[i]);
 //        cout << "SENTENCE TYPE: " << sentenceLookUp[_valid[i].getSentenceType()] << endl;
 //        cout << _valid[i] << endl;
     }
+//    cout << "out "<< endl;
     removeTrees();
     return _valid;
 }
@@ -237,6 +242,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
         for(WordType cT = getNextType(W,IGNORETHIS); cT != IGNORETHIS; cT = getNextType(W,cT)){
             GrammarPhrase g = WTtoGP[cT];
 //            cout << "The WT converted to gp: " << phraseLookUp[g] << endl;
+//            cout << "Match this: " << phraseLookUp[S.getPhrase()] << endl;
             if(S.getPhrase() == g){
 //                cout << "THERE IS A MATCH" << endl;
                 ++c;
@@ -264,7 +270,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
 //            cout << "shifted down to i" << endl;
 //            cout << *S.getCurrent() << endl;
             check = recDescent(S,c);
-//            cout << "Popped out of recursion" << endl;
+//            cout << "Popped out of recur/*s*/ion" << endl;
 //            cin.get();
             if(!check && i != 0){
                 S.shiftUp();
@@ -290,6 +296,10 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
                         --c;
                         --i;
                     }
+//                    if(S.getChildAt(i)->isLeaf()){
+//                        --c;
+//                        --i;
+//                    }
                     if(i == 0){
 
                         S.removeDef();
@@ -297,7 +307,7 @@ bool Parser::recDescent(SyntaxTree& S, std::size_t& c){
                     }
                 }
 
-
+//                --i;
 //                cout << "C: " << c << endl;
 //                cout << "I: " << i << endl;
 
