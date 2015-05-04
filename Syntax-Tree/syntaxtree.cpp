@@ -263,6 +263,7 @@ void SyntaxTree::assignObjects(){
     setSubj(Tpair::_root);
     setDO(Tpair::_root);
     setIDO(Tpair::_root);
+    setAtt(Tpair::_root);
 //    cout << *this << endl;
 //    std::string s = getObj(MAINVERB).begin()->getWord().getTokenString();
 //    if(s == "is" || s == "are")
@@ -663,6 +664,28 @@ void SyntaxTree::setAux(TNpair *sentence){
     r->data()._d.second.setSyntax(AUX);
     Word W = r->data()._d.second.getWord();
     recurObj(sentence,W,AUX);
+}
+
+void SyntaxTree::setAtt(TNpair *sentence)
+{
+    TNpair* r = nullptr;
+    if(_st == DECLARATIVE){
+        r = findPhrase(sentence,VERBPHRASE);
+    }
+    else if(_st == INTERROGATIVE){
+        r = sentence;
+    }
+    else if(_st == IMPERATIVE){}
+    else{}
+
+    if(!r) return;
+//        cout << "HELFEL" << endl;
+    r = findPhrase(r,ADJPHRASE);
+    if(!r) return;
+//        cout << "{efaef" << endl;
+    r->data()._d.second.setSyntax(ATTRIBUTE);
+    Word W = r->data()._d.second.getWord();
+    recurObj(sentence,W,ATTRIBUTE);
 }
 
 /**

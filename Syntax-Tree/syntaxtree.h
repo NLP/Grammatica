@@ -82,6 +82,7 @@ private:
     void setIDO(TNpair* sentence);
     void setQ(TNpair* sentence);
     void setAux(TNpair* sentence);
+    void setAtt(TNpair *sentence);
     size_t hasDef(TNpair *phrase, GrammarPhrase g);
 
     void swapSyntax(SyntaxWord& A, SyntaxWord& B);
